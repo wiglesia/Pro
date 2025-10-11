@@ -12,14 +12,22 @@
       padding: 0;
       background: #f5f7fa;
       color: #222;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     header {
       background: #2b4c7e;
       color: white;
       padding: 1rem 2rem;
     }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
     main {
-      max-width: 800px;
+      flex: 1;
+      max-width: 900px;
       margin: 2rem auto;
       padding: 1rem 2rem;
       background: white;
@@ -29,12 +37,31 @@
     .imagen-principal {
       width: 100%;
       height: auto;
+      max-height: 400px;
+      object-fit: cover;
       border-radius: 8px;
       margin-bottom: 1rem;
+    }
+    .galeria {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .galeria img {
+      width: calc(33.333% - 0.8rem);
+      border-radius: 6px;
       object-fit: cover;
     }
     h1 {
       margin-bottom: 0.5rem;
+    }
+    .info {
+      margin-top: 1rem;
+    }
+    .info p {
+      margin-bottom: 0.6rem;
+      line-height: 1.4;
     }
     .tags {
       margin-top: 1rem;
@@ -47,13 +74,44 @@
       color: #333;
       border-radius: 20px;
       padding: 0.3rem 0.9rem;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
-    .info {
-      margin-top: 1rem;
+    .btn-whatsapp {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: #25D366;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s;
     }
-    .info p {
-      margin-bottom: 0.5rem;
+    .btn-whatsapp:hover {
+      background: #1ebe5b;
+    }
+    footer {
+      background: #2b4c7e;
+      color: white;
+      padding: 1.2rem;
+      text-align: center;
+    }
+    footer a {
+      color: white;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+    footer a:hover {
+      opacity: 0.8;
+    }
+    @media (max-width: 600px) {
+      .galeria img {
+        width: calc(50% - 0.8rem);
+      }
     }
   </style>
 </head>
@@ -64,6 +122,13 @@
   <main id="detalleContainer">
     <p>Cargando datos...</p>
   </main>
+  <footer>
+    <p>Síguenos: 
+      <a href="https://instagram.com/tu_igw_iglesia" target="_blank">Instagram</a> |
+      <a href="https://tuigwiglesia.com" target="_blank">Igw Iglesia</a> |
+      <a href="https://tusitio.com" target="_blank">Sitio Web</a>
+    </p>
+  </footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -83,10 +148,9 @@
 
     const detalleContainer = document.getElementById("detalleContainer");
 
-    // Función para obtener el valor del parámetro `id` de la URL
     function getQueryParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
+      const params = new URLSearchParams(window.location.search);
+      return params.get(param);
     }
 
     async function cargarDetalle() {
@@ -97,31 +161,48 @@
       }
       try {
         const docRef = doc(db, "comercios", id);
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists()) {
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) {
           detalleContainer.innerHTML = `<p style="color:red;">No se encontró el comercio.</p>`;
           return;
         }
-        const v = docSnap.data();
+        const v = snap.data();
 
-        // Construir HTML para mostrar los datos
+        // Preparar galerías e imágenes
+        let galeriaHTML = "";
+        if (Array.isArray(v.galeria) && v.galeria.length > 0) {
+          galeriaHTML = `<div class="galeria">` +
+            v.galeria.map(url => `<img src="${url}" alt="Galería">`).join("") +
+            `</div>`;
+        }
+
+        // Etiquetas
         const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join("");
-        const dias = (v.dias || []).join(", ");
-        const horarios = (v.horarios || []).map(h => `${h.apertura} - ${h.cierre}`).join("<br>");
+
+        // WhatsApp link
+        // Asumimos que tienes campo v.telefono con número con código país sin símbolos extra
+        let whatsappLink = "";
+        if (v.telefono) {
+          // quitar espacios, guiones etc.
+          const numero = v.telefono.replace(/[^0-9]/g, "");
+          whatsappLink = `https://wa.me/${numero}`;
+        }
 
         detalleContainer.innerHTML = `
-          ${v.imagen ? `<img src="${v.imagen}" class="imagen-principal" alt="${v.nombre}">` : ''}
+          ${v.imagen ? `<img src="${v.imagen}" class="imagen-principal" alt="${v.nombre}">` : ""}
           <h1>${v.nombre || ""}</h1>
           <div class="info">
-            ${v.tipo ? `<p><strong>Tipo:</strong> ${v.tipo}</p>` : ''}
-            ${v.distrito ? `<p><strong>Distrito:</strong> ${v.distrito}</p>` : ''}
-            ${v.telefono ? `<p><strong>Teléfono:</strong> ${v.telefono}</p>` : ''}
-            ${v.direccion ? `<p><strong>Dirección:</strong> ${v.direccion}</p>` : ''}
-            ${v.descripcion ? `<p><strong>Descripción:</strong> ${v.descripcion}</p>` : ''}
-            ${dias ? `<p><strong>Días de apertura:</strong> ${dias}</p>` : ''}
-            ${horarios ? `<p><strong>Horarios:</strong><br>${horarios}</p>` : ''}
+            ${v.tipo ? `<p><strong>Tipo:</strong> ${v.tipo}</p>` : ""}
+            ${v.distrito ? `<p><strong>Distrito:</strong> ${v.distrito}</p>` : ""}
+            ${v.telefono ? `<p><strong>Teléfono:</strong> ${v.telefono}</p>` : ""}
+            ${v.direccion ? `<p><strong>Dirección:</strong> ${v.direccion}</p>` : ""}
+            ${v.descripcion ? `<p><strong>Descripción:</strong> ${v.descripcion}</p>` : ""}
+            ${ (v.dias && v.dias.length) ? `<p><strong>Días de apertura:</strong> ${v.dias.join(", ")}</p>` : ""}
+            ${ (v.horarios && v.horarios.length) ? `<p><strong>Horarios:</strong> ${v.horarios.map(h => `${h.apertura} - ${h.cierre}`).join("<br>")}</p>` : ""}
           </div>
           <div class="tags">${tagsHTML}</div>
+          ${galeriaHTML}
+          ${ whatsappLink ? `<a href="${whatsappLink}" class="btn-whatsapp" target="_blank">Contactar por WhatsApp</a>` : ""}
         `;
 
       } catch (e) {
