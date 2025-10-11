@@ -430,52 +430,60 @@
     }
 
     function renderVendedores() {
-      contenedor.innerHTML = '';
-      const busqueda = input.value.toLowerCase();
-      const distrito = selectDistrito.value;
+  contenedor.innerHTML = '';
+  const busqueda = input.value.toLowerCase();
+  const distrito = selectDistrito.value;
 
-      let filtrados = vendedores.filter(v =>
-        (v.nombre && v.nombre.toLowerCase().includes(busqueda)) ||
-        (v.tipo && v.tipo.toLowerCase().includes(busqueda)) ||
-        (v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda)))
-      );
-      filtrados = filtrados.filter(v => (distrito === "todos" || v.distrito == distrito));
+  // Filtrar por búsqueda y distrito primero
+  let filtrados = vendedores.filter(v => {
+    const nombreOK = v.nombre && v.nombre.toLowerCase().includes(busqueda);
+    const tipoOK = v.tipo && v.tipo.toLowerCase().includes(busqueda);
+    const tagsOK = v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda));
+    const distritoOK = (distrito === "todos" || v.distrito == distrito);
+    return (nombreOK || tipoOK || tagsOK) && distritoOK;
+  });
 
-      console.log("Antes de filtrar activos:", filtrados.map(v => v.id));
+  console.log("Filtrados tras búsqueda/distrito:", filtrados.map(v => v.id));
 
-      if (mostrarSoloActivos) {
-        const activos = filtrados.filter(v => v.activo && estaAbierto(v));
-        console.log("IDs activos después de filtro:", activos.map(v => v.id));
-        filtrados = activos;
-      }
+  if (mostrarSoloActivos) {
+    // Aplicar filtro de abierto + activo
+    filtrados = filtrados.filter(v => {
+      const abierto = estaAbierto(v);
+      console.log("Para v.id", v.id, "activo:", v.activo, "abierto:", abierto);
+      return v.activo && abierto;
+    });
+    console.log("Filtrados solo activos:", filtrados.map(v => v.id));
+  }
 
-      if (filtrados.length === 0) {
-        contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">😕 No se encontraron resultados</p>`;
-        return;
-      }
+  if (filtrados.length === 0) {
+    contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">😕 No se encontraron resultados</p>`;
+    return;
+  }
 
-      filtrados.forEach(v => {
-        const activo = estaAbierto(v);
-        const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-        const telefonoLimpio = v.telefono ? v.telefono.replace(/[^0-9+]/g, "") : '';
-        const whatsappLink = telefonoLimpio ? `https://wa.me/${telefonoLimpio}` : '';
-        contenedor.innerHTML += `
-          <div class="card">
-            <a href="detalle.html?id=${v.id}" class="card-link">
-              <img src="${v.imagen || ''}" alt="${v.nombre || ''}">
-            </a>
-            ${whatsappLink ? `<a href="${whatsappLink}" target="_blank" class="btn-whatsapp-card"><i class="fab fa-whatsapp"></i></a>` : ''}
-            <span class="status ${activo ? '' : 'closed'}">${activo ? 'Abierto' : 'Cerrado'}</span>
-            <div class="card-content">
-              <a href="detalle.html?id=${v.id}" class="card-link">
-                <h3>${v.nombre || ''}</h3>
-                <p>${v.tipo || ''}</p>
-              </a>
-              <div class="tags">${tagsHTML}</div>
-            </div>
-          </div>`;
-      });
-    }
+  filtrados.forEach(v => {
+    const activo = estaAbierto(v);
+    const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+    const telefonoLimpio = v.telefono ? v.telefono.replace(/[^0-9+]/g, "") : '';
+    const whatsappLink = telefonoLimpio ? `https://wa.me/${telefonoLimpio}` : '';
+
+    contenedor.innerHTML += `
+      <div class="card">
+        <a href="detalle.html?id=${v.id}" class="card-link">
+          <img src="${v.imagen || ''}" alt="${v.nombre || ''}">
+        </a>
+        ${whatsappLink ? `<a href="${whatsappLink}" target="_blank" class="btn-whatsapp-card"><i class="fab fa-whatsapp"></i></a>` : ''}
+        <span class="status ${activo ? '' : 'closed'}">${activo ? 'Abierto' : 'Cerrado'}</span>
+        <div class="card-content">
+          <a href="detalle.html?id=${v.id}" class="card-link">
+            <h3>${v.nombre || ''}</h3>
+            <p>${v.tipo || ''}</p>
+          </a>
+          <div class="tags">${tagsHTML}</div>
+        </div>
+      </div>`;
+  });
+}
+
 
     async function cargarComercios() {
       try {
