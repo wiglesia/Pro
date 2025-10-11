@@ -305,20 +305,41 @@
     }
 
     function estaAbierto(v) {
-      const ahora = new Date();
-      const diaActual = ahora.toLocaleString('es-ES', { weekday: 'long' }).toLowerCase();
-      const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
-      if (!v.dias || !v.dias.includes(diaActual)) return false;
-      const franjas = Array.isArray(v.horarios) ? v.horarios : [v.horario];
-      return franjas.some(h => {
-        if (!h || !h.apertura || !h.cierre) return false;
-        const [hA, mA] = h.apertura.split(':').map(Number);
-        const [hC, mC] = h.cierre.split(':').map(Number);
-        const horaA = hA + mA / 60;
-        const horaC = hC + mC / 60;
-        return horaActual >= horaA && horaActual <= horaC;
-      });
+  const ahora = new Date();
+  const diaActual = ahora.toLocaleString('es-ES', { weekday: 'long' }).toLowerCase();
+  const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
+
+  // Validar días definidos
+  if (!v.dias || !Array.isArray(v.dias) || !v.dias.includes(diaActual)) {
+    return false;
+  }
+
+  let franjas = [];
+  if (Array.isArray(v.horarios)) {
+    franjas = v.horarios;
+  } else if (v.horario) {
+    franjas = [v.horario];
+  } else {
+    return false;
+  }
+
+  return franjas.some(h => {
+    if (!h.apertura || !h.cierre) return false;
+
+    const [hA, mA] = h.apertura.split(':').map(Number);
+    const [hC, mC] = h.cierre.split(':').map(Number);
+    const horaA = hA + mA / 60;
+    const horaC = hC + mC / 60;
+
+    // Si cruza la medianoche
+    if (horaA > horaC) {
+      return horaActual >= horaA || horaActual <= horaC;
+    } else {
+      return horaActual >= horaA && horaActual <= horaC;
     }
+  });
+}
+
 
     function renderVendedores() {
       contenedor.innerHTML = '';
