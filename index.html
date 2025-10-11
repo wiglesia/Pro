@@ -342,50 +342,51 @@
 
 
     function renderVendedores() {
-      contenedor.innerHTML = '';
-      const busqueda = input.value.toLowerCase();
-      const distrito = selectDistrito.value;
+  contenedor.innerHTML = '';
+  const busqueda = input.value.toLowerCase();
+  const distrito = selectDistrito.value;
 
-      let filtrados = vendedores.filter(v =>
-        (v.nombre && v.nombre.toLowerCase().includes(busqueda)) ||
-        (v.tipo && v.tipo.toLowerCase().includes(busqueda)) ||
-        (v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda)))
-      );
-      filtrados = filtrados.filter(v => (distrito === "todos" || v.distrito == distrito));
+  let filtrados = vendedores.filter(v =>
+    (v.nombre && v.nombre.toLowerCase().includes(busqueda)) ||
+    (v.tipo && v.tipo.toLowerCase().includes(busqueda)) ||
+    (v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda)))
+  );
+  filtrados = filtrados.filter(v => (distrito === "todos" || v.distrito == distrito));
 
-      console.log("IDs tras búsqueda/distrito:", filtrados.map(v => v.id));
+  console.log("IDs tras búsqueda/distrito:", filtrados.map(v => v.id));
 
-      if (mostrarSoloActivos) {
-        filtrados = filtrados.filter(v => {
-          const open = estaAbierto(v);
-          console.log("Chequeo v.id:", v.id, "v.activo:", v.activo, "open:", open, "dias:", v.dias, "horarios:", v.horarios);
-          return v.activo && open;
-        });
-        console.log("IDs tras filtro activos:", filtrados.map(v => v.id));
-      }
+  if (mostrarSoloActivos) {
+    filtrados = filtrados.filter(v => {
+      const open = estaAbierto(v);
+      console.log("Chequeo v.id:", v.id, "open:", open, "dias:", v.dias, "horarios:", v.horarios);
+      return open;
+    });
+    console.log("IDs tras filtro activos:", filtrados.map(v => v.id));
+  }
 
-      if (filtrados.length === 0) {
-        contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;">😕 No se encontraron resultados</p>`;
-        return;
-      }
+  if (filtrados.length === 0) {
+    contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;">😕 No se encontraron resultados</p>`;
+    return;
+  }
 
-      filtrados.forEach(v => {
-        const activo = estaAbierto(v);
-        const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-        contenedor.innerHTML += `
-          <a href="detalle.html?id=${v.id}" style="text-decoration:none;color:inherit;">
-            <div class="card">
-              <img src="${v.imagen}" alt="${v.nombre}">
-              <span class="status ${activo ? '' : 'closed'}">${activo ? 'Abierto' : 'Cerrado'}</span>
-              <div class="card-content">
-                <h3>${v.nombre}</h3>
-                <p>${v.tipo}</p>
-                <div class="tags">${tagsHTML}</div>
-              </div>
-            </div>
-          </a>`;
-      });
-    }
+  filtrados.forEach(v => {
+    const activo = estaAbierto(v);
+    const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+    contenedor.innerHTML += `
+      <a href="detalle.html?id=${v.id}" style="text-decoration:none;color:inherit;">
+        <div class="card">
+          <img src="${v.imagen}" alt="${v.nombre}">
+          <span class="status ${activo ? '' : 'closed'}">${activo ? 'Abierto' : 'Cerrado'}</span>
+          <div class="card-content">
+            <h3>${v.nombre}</h3>
+            <p>${v.tipo}</p>
+            <div class="tags">${tagsHTML}</div>
+          </div>
+        </div>
+      </a>`;
+  });
+}
+
 
     async function cargarComercios() {
       try {
