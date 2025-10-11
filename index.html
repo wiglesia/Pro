@@ -1,550 +1,510 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sabores del Distrito</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8gI0k7JmE0C4pL7p5I8F0y/p9H6T8I7Lh01C4w7s60Q4o7Jk0T2A2gQ0g=" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* ==================================== */
-        /* 🎨 Variables y Configuración Global */
-        /* ==================================== */
-        :root {
-            --color-primary: #1e3a8a; /* Azul oscuro corporativo */
-            --color-secondary: #0d9488; /* Verde azulado para acentos */
-            --color-whatsapp: #25D366;
-            --color-danger: #dc3545;
-            
-            /* Modo Claro */
-            --color-bg: #f4f7f9;
-            --color-card: #ffffff;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --border-color: #e5e7eb;
-            --tag-bg: #e0f2fe;
-            --tag-text: #0c4a6e;
-            --toggle-bg: #ccc;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sabores del Distrito</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8gI0k7JmE0C4pL7p5I8F0y/p9H6T8I7Lh01C4w7s60Q4o7Jk0T2A2gQ0g=" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --color-primary: #1e3a8a;
+      --color-secondary: #0d9488;
+      --color-whatsapp: #25D366;
+      --color-danger: #dc3545;
 
-        [data-theme="dark"] {
-            --color-bg: #121212;
-            --color-card: #1f1f1f;
-            --text-dark: #f0f0f0;
-            --text-light: #b0b0b0;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            --border-color: #333333;
-            --tag-bg: #374151;
-            --tag-text: #d1d5db;
-            --toggle-bg: #4b5563;
-        }
+      --color-bg: #f4f7f9;
+      --color-card: #ffffff;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --border-color: #e5e7eb;
+      --tag-bg: #e0f2fe;
+      --tag-text: #0c4a6e;
+      --toggle-bg: #ccc;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            /* Transición universal para Modo Oscuro/Claro */
-            transition: background 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s;
-        }
+    [data-theme="dark"] {
+      --color-bg: #121212;
+      --color-card: #1f1f1f;
+      --text-dark: #f0f0f0;
+      --text-light: #b0b0b0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      --border-color: #333333;
+      --tag-bg: #374151;
+      --tag-text: #d1d5db;
+      --toggle-bg: #4b5563;
+    }
 
-        body {
-            background: var(--color-bg);
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
 
-        /* ==================================== */
-        /* ⬆️ Header y Controles */
-        /* ==================================== */
-        header {
-            background: var(--color-primary);
-            color: white;
-            padding: 1.2rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            box-shadow: var(--shadow);
-        }
+    body {
+      background: var(--color-bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        header h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
+    header {
+      background: var(--color-primary);
+      color: white;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--shadow);
+    }
 
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
 
-        select, button {
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            border: 1px solid white;
-            font-size: 0.9rem;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--color-primary);
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        
-        button.theme-toggle {
-            background: var(--color-secondary);
-            color: white;
-            border-color: var(--color-secondary);
-        }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
 
-        button.theme-toggle:hover {
-            background: var(--color-primary);
-            border-color: var(--color-primary);
-            transform: scale(1.02);
-        }
+    select, button {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: 1px solid white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--color-primary);
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
 
-        /* ==================================== */
-        /* 🔍 Búsqueda y Filtros */
-        /* ==================================== */
-        .search-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin: 2rem auto 1.5rem;
-            width: 90%;
-            max-width: 1200px;
-        }
+    button.theme-toggle {
+      background: var(--color-secondary);
+      color: white;
+      border-color: var(--color-secondary);
+    }
 
-        .search-bar {
-            background: var(--color-card);
-            box-shadow: var(--shadow);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            padding: 0.5rem;
-        }
+    button.theme-toggle:hover {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      transform: scale(1.02);
+    }
 
-        .search-bar i {
-            padding: 0 0.5rem;
-            color: var(--text-light);
-        }
+    .search-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem auto 1.5rem;
+      width: 90%;
+      max-width: 1200px;
+    }
 
-        .search-bar input {
-            flex: 1;
-            padding: 0.6rem 0.5rem;
-            border: none;
-            background: var(--color-card);
-            color: var(--text-dark);
-            font-size: 1rem;
-            outline: none;
-        }
+    .search-bar {
+      background: var(--color-card);
+      box-shadow: var(--shadow);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 0.5rem;
+    }
 
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            background: var(--color-card);
-            padding: 0.7rem 1.2rem;
-            border-radius: 10px;
-            box-shadow: 0 1px 4px var(--shadow);
-        }
+    .search-bar i {
+      padding: 0 0.5rem;
+      color: var(--text-light);
+    }
 
-        /* Estilos del Switch (Modo Oscuro compatible) */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-        .switch input { display: none; }
+    .search-bar input {
+      flex: 1;
+      padding: 0.6rem 0.5rem;
+      border: none;
+      background: var(--color-card);
+      color: var(--text-dark);
+      font-size: 1rem;
+      outline: none;
+    }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--toggle-bg);
-            border-radius: 24px;
-            transition: 0.4s;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px; width: 18px;
-            left: 3px; bottom: 3px;
-            background-color: white;
-            border-radius: 50%;
-            transition: 0.4s;
-        }
-        input:checked + .slider {
-            background-color: var(--color-primary);
-        }
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--color-card);
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px var(--shadow);
+    }
 
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
 
-        /* ==================================== */
-        /* 🏬 Grid de Comercios (Main) */
-        /* ==================================== */
-        main {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            padding: 2rem;
-            width: 100%;
-            max-width: 1200px;
-            margin: auto;
-            flex-grow: 1;
-        }
+    .switch input { display: none; }
 
-        .card {
-            background: var(--color-card);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            text-decoration: none; /* Asegura que el enlace no tenga subrayado */
-            color: inherit; /* Hereda el color del texto */
-        }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--toggle-bg);
+      border-radius: 24px;
+      transition: 0.4s;
+    }
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px var(--shadow);
-        }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px; width: 18px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
 
-        .card-link {
-            text-decoration: none;
-            color: inherit;
-        }
+    input:checked + .slider {
+      background-color: var(--color-primary);
+    }
 
-        .card img {
-            width: 100%;
-            height: 190px;
-            object-fit: cover;
-            border-bottom: 1px solid var(--border-color);
-        }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
 
-        .card-content {
-            padding: 1.2rem;
-            flex-grow: 1; /* Permite que el contenido ocupe el espacio */
-        }
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      flex-grow: 1;
+    }
 
-        .card-content h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.1rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
+    .card {
+      background: var(--color-card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .card-content p {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 0.6rem;
-            font-weight: 500;
-        }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px var(--shadow);
+    }
 
-        .status {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: white;
-            padding: 0.3rem 0.7rem;
-            border-radius: 6px;
-            background: var(--color-secondary);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .closed { background: var(--color-danger); }
+    .card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-bottom: 1px solid var(--border-color);
+    }
 
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
+    .card-content {
+      padding: 1.2rem;
+      flex-grow: 1;
+    }
 
-        .tag {
-            background: var(--tag-bg);
-            color: var(--tag-text);
-            border-radius: 20px;
-            padding: 0.2rem 0.7rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+    .card-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
 
-        .tag:hover {
-            background: var(--color-primary);
-            color: white;
-        }
-        
-        /* Botón de WhatsApp flotante dentro de la card */
-        .btn-whatsapp-card {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            background: var(--color-whatsapp);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            z-index: 5;
-            transition: transform 0.2s;
-        }
-        
-        .btn-whatsapp-card:hover {
-            transform: scale(1.1);
-        }
+    .card-content p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
 
-        /* ==================================== */
-        /* ⬇️ Footer */
-        /* ==================================== */
-        footer {
-            background: var(--color-primary);
-            color: white;
-            text-align: center;
-            padding: 1.2rem;
-            margin-top: auto;
-            font-size: 0.9rem;
-        }
+    .status {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      background: var(--color-secondary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
 
-        /* Media Queries */
-        @media (max-width: 768px) {
-            header { flex-direction: column; align-items: flex-start; }
-            .controls { justify-content: space-between; width: 100%; }
-            .search-container { width: 95%; margin-top: 1.5rem; }
-            main { padding: 1rem; gap: 1.5rem; }
-            .card-content h3 { font-size: 1.2rem; }
-            .card img { height: 160px; }
-        }
-    </style>
+    .closed {
+      background: var(--color-danger);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      border-radius: 20px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tag:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .btn-whatsapp-card {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      background: var(--color-whatsapp);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      z-index: 5;
+      transition: transform 0.2s;
+    }
+
+    .btn-whatsapp-card:hover {
+      transform: scale(1.1);
+    }
+
+    footer {
+      background: var(--color-primary);
+      color: white;
+      text-align: center;
+      padding: 1.2rem;
+      margin-top: auto;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .controls { justify-content: space-between; width: 100%; }
+      .search-container { width: 95%; margin-top: 1.5rem; }
+      main { padding: 1rem; gap: 1.5rem; }
+      .card-content h3 { font-size: 1.2rem; }
+      .card img { height: 160px; }
+    }
+  </style>
 </head>
 <body data-theme="light">
-    <header>
-        <h1><i class="fas fa-utensils"></i> Sabores del Distrito</h1>
-        <div class="controls">
-            <select id="districtSelect">
-                <option value="todos">Todos los distritos</option>
-                <option value="1">Las Flores</option>
-                <option value="2">Rodeo</option>
-                <option value="3">Tudcum</option>
-                <option value="4">Bella Vista</option>
-                <option value="5">Villa Iglesia</option>
-            </select>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙 Modo Oscuro</button>
-        </div>
-    </header>
+  <header>
+    <h1><i class="fas fa-utensils"></i> Sabores del Distrito</h1>
+    <div class="controls">
+      <select id="districtSelect">
+        <option value="todos">Todos los distritos</option>
+        <option value="1">Las Flores</option>
+        <option value="2">Rodeo</option>
+        <option value="3">Tudcum</option>
+        <option value="4">Bella Vista</option>
+        <option value="5">Villa Iglesia</option>
+      </select>
+      <button class="theme-toggle">🌙 Modo Oscuro</button>
+    </div>
+  </header>
 
-    <section class="search-container">
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Buscar por nombre o categoría...">
-        </div>
-        <div class="toggle-container">
-            <span>Mostrar:</span>
-            <label class="switch">
-                <input type="checkbox" id="toggleActivos" checked>
-                <span class="slider"></span>
-            </label>
-            <span id="toggleLabel">Solo abiertos</span>
-        </div>
-    </section>
+  <section class="search-container">
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Buscar por nombre o categoría...">
+    </div>
+    <div class="toggle-container">
+      <span>Mostrar:</span>
+      <label class="switch">
+        <input type="checkbox" id="toggleActivos" checked>
+        <span class="slider"></span>
+      </label>
+      <span id="toggleLabel">Solo abiertos</span>
+    </div>
+  </section>
 
-    <main id="vendorsList"></main>
+  <main id="vendorsList"></main>
 
-    <footer>
-        © 2025 Sabores del Distrito — Plataforma Comunitaria
-    </footer>
+  <footer>
+    © 2025 Sabores del Distrito — Plataforma Comunitaria
+  </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
-            authDomain: "saboresdeldistrito.firebaseapp.com",
-            projectId: "saboresdeldistrito",
-            storageBucket: "saboresdeldistrito.firebasestorage.app",
-            messagingSenderId: "814541339857",
-            appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
+      authDomain: "saboresdeldistrito.firebaseapp.com",
+      projectId: "saboresdeldistrito",
+      storageBucket: "saboresdeldistrito.firebasestorage.app",
+      messagingSenderId: "814541339857",
+      appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const contenedor = document.getElementById('vendorsList');
+    const input = document.getElementById('searchInput');
+    const selectDistrito = document.getElementById('districtSelect');
+    const checkbox = document.getElementById('toggleActivos');
+    const label = document.getElementById('toggleLabel');
+    const themeToggleBtn = document.querySelector('.theme-toggle');
+    let mostrarSoloActivos = true;
+    let vendedores = [];
+
+    // Tema
+    function toggleTheme() {
+      const cur = document.body.dataset.theme;
+      const nuevo = cur === 'dark' ? 'light' : 'dark';
+      document.body.dataset.theme = nuevo;
+      localStorage.setItem('theme', nuevo);
+      themeToggleBtn.textContent = nuevo === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+    }
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      document.body.dataset.theme = saved;
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.dataset.theme = 'dark';
+    }
+    themeToggleBtn.textContent = document.body.dataset.theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+    themeToggleBtn.addEventListener('click', toggleTheme);
+
+    function estaAbierto(v) {
+      const ahora = new Date();
+      const diaActual = ahora.toLocaleString('es-ES', { weekday: 'long' }).toLowerCase();
+      console.log("Checking", v.id, "dias:", v.dias, "dia actual:", diaActual);
+      if (!v.dias || !v.dias.includes(diaActual)) return false;
+      const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
+      const franjas = Array.isArray(v.horarios) ? v.horarios : (v.horario ? [v.horario] : []);
+      console.log("Franjas para", v.id, franjas);
+      return franjas.some(h => {
+        const parseTime = (timeStr) => {
+          if (!timeStr) return -1;
+          const [h1, m1] = timeStr.split(':').map(Number);
+          return h1 + m1 / 60;
         };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const contenedor = document.getElementById('vendorsList');
-        const input = document.getElementById('searchInput');
-        const selectDistrito = document.getElementById('districtSelect');
-        const checkbox = document.getElementById('toggleActivos');
-        const label = document.getElementById('toggleLabel');
-        let mostrarSoloActivos = true;
-        let vendedores = [];
-
-        // Funcionalidad de Modo Oscuro/Claro
-        const themeToggleBtn = document.querySelector('.theme-toggle');
-        
-        function toggleTheme() {
-            const currentTheme = document.body.dataset.theme;
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.dataset.theme = newTheme;
-            localStorage.setItem('theme', newTheme);
-            themeToggleBtn.innerHTML = newTheme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+        const horaA = parseTime(h.apertura);
+        const horaC = parseTime(h.cierre);
+        if (horaA === -1 || horaC === -1) return false;
+        console.log("  intervalo:", horaA, "-", horaC, "hora ahora:", horaActual);
+        if (horaA > horaC) {
+          return horaActual >= horaA || horaActual <= horaC;
+        } else {
+          return horaActual >= horaA && horaActual <= horaC;
         }
-        
-        // Cargar el tema guardado o el preferido por el sistema
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.body.dataset.theme = savedTheme;
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.dataset.theme = 'dark';
-        }
-        themeToggleBtn.innerHTML = document.body.dataset.theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+      });
+    }
 
-        function estaAbierto(v) {
-            const ahora = new Date();
-            const diaActual = ahora.toLocaleString('es-ES', { weekday: 'long' }).toLowerCase();
-            
-            // Asumiendo que v.dias contiene los días en minúsculas y sin tildes (ej: 'lunes', 'domingo')
-            if (!v.dias || !v.dias.includes(diaActual)) return false; 
-            
-            const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
-            
-            // Asegura que siempre haya un array de horarios para iterar
-            const franjas = Array.isArray(v.horarios) ? v.horarios : (v.horario ? [v.horario] : []);
+    function renderVendedores() {
+      contenedor.innerHTML = '';
+      const busqueda = input.value.toLowerCase();
+      const distrito = selectDistrito.value;
 
-            return franjas.some(h => {
-                // Función auxiliar para parsear HH:MM a decimal
-                const parseTime = (timeStr) => {
-                    if (!timeStr) return -1;
-                    const [h, m] = timeStr.split(':').map(Number);
-                    return h + m / 60;
-                };
+      let filtrados = vendedores.filter(v =>
+        (v.nombre && v.nombre.toLowerCase().includes(busqueda)) ||
+        (v.tipo && v.tipo.toLowerCase().includes(busqueda)) ||
+        (v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda)))
+      );
+      filtrados = filtrados.filter(v => (distrito === "todos" || v.distrito == distrito));
 
-                const horaA = parseTime(h.apertura);
-                const horaC = parseTime(h.cierre);
-                
-                if (horaA === -1 || horaC === -1) return false;
+      console.log("Antes de filtrar activos:", filtrados.map(v => v.id));
 
-                // Manejo de horarios que cruzan la medianoche (ej: 22:00 a 02:00)
-                if (horaA > horaC) {
-                    return horaActual >= horaA || horaActual <= horaC;
-                } else {
-                    return horaActual >= horaA && horaActual <= horaC;
-                }
-            });
-        }
+      if (mostrarSoloActivos) {
+        const activos = filtrados.filter(v => v.activo && estaAbierto(v));
+        console.log("IDs activos después de filtro:", activos.map(v => v.id));
+        filtrados = activos;
+      }
 
-        function renderVendedores() {
-            contenedor.innerHTML = '';
-            const busqueda = input.value.toLowerCase();
-            const distrito = selectDistrito.value;
+      if (filtrados.length === 0) {
+        contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">😕 No se encontraron resultados</p>`;
+        return;
+      }
 
-            let filtrados = vendedores.filter(v =>
-                (v.nombre.toLowerCase().includes(busqueda) ||
-                 (v.tipo && v.tipo.toLowerCase().includes(busqueda)) ||
-                 (v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda)))) &&
-                (distrito === "todos" || v.distrito == distrito)
-            );
+      filtrados.forEach(v => {
+        const activo = estaAbierto(v);
+        const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        const telefonoLimpio = v.telefono ? v.telefono.replace(/[^0-9+]/g, "") : '';
+        const whatsappLink = telefonoLimpio ? `https://wa.me/${telefonoLimpio}` : '';
+        contenedor.innerHTML += `
+          <div class="card">
+            <a href="detalle.html?id=${v.id}" class="card-link">
+              <img src="${v.imagen || ''}" alt="${v.nombre || ''}">
+            </a>
+            ${whatsappLink ? `<a href="${whatsappLink}" target="_blank" class="btn-whatsapp-card"><i class="fab fa-whatsapp"></i></a>` : ''}
+            <span class="status ${activo ? '' : 'closed'}">${activo ? 'Abierto' : 'Cerrado'}</span>
+            <div class="card-content">
+              <a href="detalle.html?id=${v.id}" class="card-link">
+                <h3>${v.nombre || ''}</h3>
+                <p>${v.tipo || ''}</p>
+              </a>
+              <div class="tags">${tagsHTML}</div>
+            </div>
+          </div>`;
+      });
+    }
 
-            if (mostrarSoloActivos) {
-                // Filtramos primero los activos para ordenarlos
-                const activos = filtrados.filter(v => v.activo && estaAbierto(v));
-                const inactivos = filtrados.filter(v => !v.activo || !estaAbierto(v));
-                filtrados = activos; // Solo mostramos los activos si el filtro está marcado.
-            }
+    async function cargarComercios() {
+      try {
+        const snapshot = await getDocs(collection(db, "comercios"));
+        vendedores = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        console.log("Todos los vendedores:", vendedores.map(v => v.id));
+        renderVendedores();
+      } catch (e) {
+        console.error("❌ Error al cargar comercios:", e);
+        contenedor.innerHTML = `<p style="color:var(--color-danger);grid-column:1/-1;text-align:center;padding:3rem;">❌ Error al cargar los datos. Verifique conexión Firebase.</p>`;
+      }
+    }
 
-            if (filtrados.length === 0) {
-                contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding: 3rem; color:var(--text-light);">😕 No se encontraron resultados.</p>`;
-                return;
-            }
+    input.addEventListener('input', renderVendedores);
+    selectDistrito.addEventListener('change', renderVendedores);
+    checkbox.addEventListener('change', () => {
+      mostrarSoloActivos = checkbox.checked;
+      label.textContent = checkbox.checked ? "Solo abiertos" : "Todos los locales";
+      renderVendedores();
+    });
 
-            filtrados.forEach(v => {
-                const activo = estaAbierto(v);
-                const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-                
-                // Limpiamos el número de teléfono para el link de WhatsApp
-                const telefonoLimpio = v.telefono ? v.telefono.replace(/[^0-9+]/g, "") : '';
-                const whatsappLink = telefonoLimpio ? `https://wa.me/${telefonoLimpio}` : '';
-
-                contenedor.innerHTML += `
-                    <div class="card">
-                        <a href="detalle.html?id=${v.id}" class="card-link">
-                            <img src="${v.imagen || 'placeholder.jpg'}" alt="${v.nombre}">
-                        </a>
-                        
-                        ${whatsappLink ? `<a href="${whatsappLink}" target="_blank" class="btn-whatsapp-card" title="Escribir por WhatsApp"><i class="fab fa-whatsapp"></i></a>` : ''}
-
-                        <span class="status ${activo ? '' : 'closed'}">${activo ? 'Abierto' : 'Cerrado'}</span>
-                        
-                        <div class="card-content">
-                            <a href="detalle.html?id=${v.id}" class="card-link">
-                                <h3>${v.nombre}</h3>
-                                <p>${v.tipo || 'Comercio'}</p>
-                            </a>
-                            <div class="tags">${tagsHTML || '<span class="tag">Sin etiquetas</span>'}</div>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        async function cargarComercios() {
-            try {
-                const snapshot = await getDocs(collection(db, "comercios"));
-
-                vendedores = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-
-                renderVendedores();
-
-            } catch (e) {
-                console.error("❌ Error al cargar comercios:", e);
-                contenedor.innerHTML = `<p style="color:var(--color-danger); grid-column:1/-1;text-align:center; padding: 3rem;">❌ Error al cargar los datos. Verifique la conexión a Firebase.</p>`;
-            }
-        }
-
-        function toggleActivosHandler() {
-            mostrarSoloActivos = checkbox.checked;
-            label.textContent = checkbox.checked ? "Solo abiertos" : "Todos los locales";
-            renderVendedores();
-        }
-
-        // Event Listeners
-        input.addEventListener('input', renderVendedores);
-        selectDistrito.addEventListener('change', renderVendedores);
-        checkbox.addEventListener('change', toggleActivosHandler);
-
-        // Carga inicial
-        cargarComercios();
-
-        // Actualización periódica
-        setInterval(() => {
-            console.log("⏳ Actualizando estado de locales...");
-            renderVendedores();
-        }, 60000); // 1 minuto
-    </script>
+    cargarComercios();
+    setInterval(() => {
+      console.log("⏳ Actualizando locales...");
+      renderVendedores();
+    }, 60000);
+  </script>
 </body>
 </html>
