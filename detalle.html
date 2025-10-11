@@ -1,502 +1,502 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detalle del Comercio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8gI0k7JmE0C4pL7p5I8F0y/p9H6T8I7Lh01C4w7s60Q4o7Jk0T2A2gQ0g=" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* ================================ */
-        /* 🎨 Variables y Configuración Global */
-        /* ================================ */
-        :root {
-            --color-primary: #1e3a8a; /* Azul corporativo oscuro */
-            --color-secondary: #0d9488; /* Verde azulado para botones/íconos */
-            --color-accent: #f59e0b; /* Amarillo para detalles */
-            --color-whatsapp: #25D366;
-            --color-bg: #f4f6f8;
-            --color-card: #ffffff;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --transition: all 0.3s ease;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalle del Comercio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512‑SnH5WK+bZxgPHs44uWIX+LLMDJ8gI0k7JmE0C4pL7p5I8F0y/p9H6T8I7Lh01C4w7s60Q4o7Jk0T2A2gQ0g=" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --color-primary: #1e3a8a;
+      --color-secondary: #0d9488;
+      --color-whatsapp: #25D366;
+      --color-bg: #f4f6f8;
+      --color-card: #ffffff;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --transition: all 0.3s ease;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--color-bg);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--color-primary);
+      color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+    main {
+      flex: 1;
+      max-width: 900px;
+      width: 95%;
+      margin: 2rem auto;
+      background: var(--color-card);
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    .imagen-principal {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+    .content-section {
+      padding: 2rem 2.5rem;
+    }
+    .content-section h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+    .tipo-distrito {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .descripcion {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-top: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem 2rem;
+      margin-top: 2rem;
+    }
+    .info-item {
+      font-size: 0.95rem;
+    }
+    .info-item strong {
+      display: block;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+    }
+    .info-item strong i {
+      margin-right: 8px;
+      color: var(--color-secondary);
+    }
+    .info-item span {
+      display: block;
+      color: var(--text-light);
+    }
+    .info-item .horarios span {
+      line-height: 1.2;
+      margin-top: 0.4rem;
+    }
+    .tags-container {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+    .tags-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+    }
+    .tags-title i {
+      margin-right: 6px;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .tag {
+      background: #e0f2fe;
+      color: #0c4a6e;
+      border-radius: 4px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .actions-section {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .btn-whatsapp {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-whatsapp);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 4px 6px rgba(37,211,102,0.4);
+    }
+    .btn-whatsapp i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    .btn-whatsapp:hover {
+      background: #1ebe5b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(37,211,102,0.5);
+    }
+    .galeria-container {
+      padding: 1rem 2rem;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 1.5rem;
+    }
+    .galeria-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.8rem;
+    }
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+    }
+    .galeria img {
+      width: 100%;
+      height: 100px;
+      border-radius: 6px;
+      object-fit: cover;
+      transition: transform 0.3s;
+      cursor: zoom-in;
+    }
+    .galeria img:hover {
+      transform: scale(1.03);
+    }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: var(--color-bg);
-            color: var(--text-dark);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        /* ================================ */
-        /* 🔝 Encabezado (Header) */
-        /* ================================ */
-        header {
-            background: var(--color-primary);
-            color: white;
-            padding: 1.5rem 0;
-            box-shadow: var(--shadow-md);
-            text-align: center;
-        }
-        
-        header h1 {
-            margin: 0;
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
+    /* Modal / Lightbox Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+    }
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      background: rgba(0,0,0,0.4);
+      border: none;
+      border-radius: 4px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+    .modal-nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0 20px;
+    }
 
-        /* ================================ */
-        /* 🏷️ Contenedor Principal (Main Card) */
-        /* ================================ */
-        main {
-            flex: 1;
-            max-width: 900px;
-            width: 95%;
-            margin: 2rem auto;
-            padding: 0;
-            background: var(--color-card);
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-        }
-        
-        /* ================================ */
-        /* 🖼️ Imágenes y Galería */
-        /* ================================ */
-        .imagen-principal {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            margin-bottom: 0;
-            display: block;
-        }
-        
-        .galeria-container {
-            padding: 1rem 2rem;
-            border-top: 1px solid #e5e7eb;
-            margin-top: 1.5rem;
-        }
-        
-        .galeria-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 0.8rem;
-        }
+    footer {
+      background: var(--color-primary);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .footer-social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .footer-social-icons a {
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.1);
+      transition: var(--transition);
+    }
+    .footer-social-icons a:hover {
+      background: var(--color-secondary);
+      transform: scale(1.1);
+    }
+    footer a:not(.footer-social-icons a) {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      margin: 0 0.75rem;
+      transition: opacity 0.3s;
+    }
+    footer a:not(.footer-social-icons a):hover {
+      opacity: 0.7;
+    }
 
-        .galeria {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-        }
-        
-        .galeria img {
-            width: 100%;
-            height: 100px;
-            border-radius: 6px;
-            object-fit: cover;
-            transition: transform 0.3s;
-            cursor: zoom-in;
-        }
-        
-        .galeria img:hover {
-            transform: scale(1.03);
-        }
-
-        /* ================================ */
-        /* 📝 Contenido Principal */
-        /* ================================ */
-        .content-section {
-            padding: 2rem 2.5rem;
-        }
-        
-        .content-section h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-            color: var(--color-primary);
-        }
-        
-        .tipo-distrito {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-        }
-        
-        .descripcion {
-            font-size: 1rem;
-            line-height: 1.7;
-            margin-top: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-        
-        /* ================================ */
-        /* ℹ️ Secciones de Información */
-        /* ================================ */
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem 2rem;
-            margin-top: 2rem;
-        }
-        
-        .info-item {
-            font-size: 0.95rem;
-        }
-
-        .info-item strong {
-            display: block;
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 1rem;
-            margin-bottom: 0.2rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .info-item strong i {
-            margin-right: 8px;
-            color: var(--color-secondary);
-        }
-        
-        .info-item span {
-            display: block;
-            color: var(--text-light);
-        }
-        
-        /* Horarios especiales */
-        .info-item .horarios span {
-            line-height: 1.2;
-            margin-top: 0.4rem;
-        }
-
-        /* ================================ */
-        /* 🏷️ Etiquetas (Tags) */
-        /* ================================ */
-        .tags-container {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-        }
-        
-        .tags-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            color: var(--text-dark);
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-        
-        .tag {
-            background: #e0f2fe;
-            color: #0c4a6e;
-            border-radius: 4px;
-            padding: 0.4rem 0.9rem;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        /* ================================ */
-        /* 📞 Botones de Acción y Redes (en el Contenido) */
-        /* ================================ */
-        .actions-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 2.5rem;
-        }
-
-        .btn-whatsapp {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--color-whatsapp);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 6px rgba(37, 211, 102, 0.4);
-        }
-        
-        .btn-whatsapp i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        .btn-whatsapp:hover {
-            background: #1ebe5b;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(37, 211, 102, 0.5);
-        }
-        
-        /* Ocultamos las redes sociales dentro del content-section ya que las movimos al footer */
-        .content-section .redes-sociales {
-            display: none; 
-        }
-
-        /* ================================ */
-        /* ⬇️ Pie de página (Footer) MODIFICADO */
-        /* ================================ */
-        footer {
-            background: var(--color-primary);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 0.9rem;
-            margin-top: auto;
-            /* Flexbox para alinear el contenido */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        footer p {
-            margin-bottom: 0.5rem; /* Espacio entre el texto y los iconos */
-        }
-        
-        /* Estilos de los iconos en el Footer */
-        .footer-social-icons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-        
-        .footer-social-icons a {
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            background: rgba(255, 255, 255, 0.1); /* Fondo sutil */
-        }
-
-        .footer-social-icons a:hover {
-            background: var(--color-secondary); /* Resaltado al pasar el ratón */
-            transform: scale(1.1);
-        }
-        
-        /* Colores específicos para los enlaces en el texto del footer (si los mantienes) */
-        footer a:not(.footer-social-icons a) {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            margin: 0 0.75rem;
-            transition: opacity 0.3s;
-        }
-        
-        footer a:not(.footer-social-icons a):hover {
-            opacity: 0.7;
-        }
-        
-        /* ================================ */
-        /* 📱 Media Queries (Móviles) */
-        /* ================================ */
-        @media (max-width: 768px) {
-            .imagen-principal {
-                height: 250px;
-            }
-            main {
-                margin: 1rem auto;
-                width: 100%;
-                border-radius: 0;
-            }
-            .content-section {
-                padding: 1.5rem;
-            }
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            .galeria-container {
-                padding: 1rem 1.5rem;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .imagen-principal {
+        height: 250px;
+      }
+      main {
+        margin: 1rem auto;
+        width: 100%;
+        border-radius: 0;
+      }
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Sabores del Distrito</h1>
-    </header>
-    <main id="detalleContainer">
-        <p class="content-section" style="text-align: center;">Cargando datos...</p>
-    </main>
-    <footer>
-        <p>Conéctate con nosotros:</p>
-        <div class="footer-social-icons">
-            <a href="https://instagram.com/tu_igw_iglesia" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://tuigwiglesia.com" target="_blank" aria-label="Sitio Web"><i class="fas fa-globe"></i></a>
-            <a href="https://tusitio.com" target="_blank" aria-label="Contacto"><i class="fas fa-link"></i></a>
+  <header>
+    <h1>Sabores del Distrito</h1>
+  </header>
+  <main id="detalleContainer">
+    <p class="content-section" style="text-align: center;">Cargando datos...</p>
+  </main>
+  <footer>
+    <p>Conéctate con nosotros:</p>
+    <div class="footer-social-icons">
+      <a href="https://instagram.com/tu_igw_iglesia" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://tuigwiglesia.com" target="_blank" aria-label="Sitio Web"><i class="fas fa-globe"></i></a>
+      <a href="https://tusitio.com" target="_blank" aria-label="Contacto"><i class="fas fa-link"></i></a>
+    </div>
+    <p style="margin-top:1rem; margin-bottom:0; font-size:0.8rem;">&copy; 2025 Sabores del Distrito</p>
+  </footer>
+
+  <div class="modal" id="modalGaleria">
+    <button class="modal-close" id="modalCloseBtn">&times;</button>
+    <div class="modal-content">
+      <img src="" alt="Imagen del comercio" id="modalImage">
+    </div>
+    <div class="modal-nav">
+      <button id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+      <button id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
+      authDomain: "saboresdeldistrito.firebaseapp.com",
+      projectId: "saboresdeldistrito",
+      storageBucket: "saboresdeldistrito.firebasestorage.app",
+      messagingSenderId: "814541339857",
+      appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const detalleContainer = document.getElementById("detalleContainer");
+    const modal = document.getElementById("modalGaleria");
+    const modalImage = document.getElementById("modalImage");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let galeriaImgs = [];
+    let currentIndex = 0;
+
+    function getQueryParam(param) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(param);
+    }
+
+    function createInfoItem(iconClass, title, content, isHtml = false) {
+      if (!content || (Array.isArray(content) && content.length === 0)) return '';
+      let contentHTML = isHtml ? content : `<span>${content}</span>`;
+      return `
+        <div class="info-item">
+          <strong><i class="${iconClass}"></i>${title}</strong>
+          ${contentHTML}
+        </div>
+      `;
+    }
+
+    function createRedesSociales(redes) {
+      const links = [];
+      const icons = {
+        instagram: 'fab fa-instagram',
+        facebook: 'fab fa-facebook-f',
+        tiktok: 'fab fa-tiktok',
+        email: 'fas fa-envelope',
+        web: 'fas fa-globe'
+      };
+      for (const key in redes) {
+        if (redes[key]) {
+          links.push(`<a href="${redes[key]}" target="_blank" class="${key}"><i class="${icons[key]}"></i></a>`);
+        }
+      }
+      return links.length > 0 ? `<div class="redes-sociales">${links.join('')}</div>` : '';
+    }
+
+    function openModal(index) {
+      currentIndex = index;
+      modalImage.src = galeriaImgs[currentIndex];
+      modal.classList.add("active");
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+    }
+
+    function showNext() {
+      if (galeriaImgs.length === 0) return;
+      currentIndex = (currentIndex + 1) % galeriaImgs.length;
+      modalImage.src = galeriaImgs[currentIndex];
+    }
+
+    function showPrev() {
+      if (galeriaImgs.length === 0) return;
+      currentIndex = (currentIndex - 1 + galeriaImgs.length) % galeriaImgs.length;
+      modalImage.src = galeriaImgs[currentIndex];
+    }
+
+    modalCloseBtn.onclick = closeModal;
+    nextBtn.onclick = showNext;
+    prevBtn.onclick = showPrev;
+    modal.onclick = (e) => {
+      if (e.target === modal) closeModal();
+    };
+
+    async function cargarDetalle() {
+      const id = getQueryParam("id");
+      if (!id) {
+        detalleContainer.innerHTML = `<p class="content-section" style="color:red;">ID no proporcionado.</p>`;
+        return;
+      }
+      try {
+        const docRef = doc(db, "comercios", id);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) {
+          detalleContainer.innerHTML = `<p class="content-section" style="color:red;">No se encontró el comercio.</p>`;
+          return;
+        }
+        const v = snap.data();
+
+        let whatsappLink = "";
+        if (v.telefono) {
+          const numero = v.telefono.replace(/[^0-9+]/g, "");
+          whatsappLink = `https://wa.me/${numero}`;
+        }
+        const horariosHTML = (v.horarios || []).map(h => `<span>${h.apertura} - ${h.cierre}</span>`).join("");
+        const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join("");
+
+        galeriaImgs = Array.isArray(v.galeria) ? v.galeria : [];
+
+        // Construir galería con onclick para abrir modal
+        let galeriaHTML = "";
+        if (galeriaImgs.length > 0) {
+          galeriaHTML = `
+            <div class="galeria-container">
+              <div class="galeria-title">Otras imágenes</div>
+              <div class="galeria">
+                ${galeriaImgs.map((url, idx) => `<img src="${url}" alt="Galería ${idx+1}" onclick="openModal(${idx})">`).join('')}
+              </div>
             </div>
-        <p style="margin-top: 1rem; margin-bottom: 0; font-size: 0.8rem;">&copy; 2024 Tu Marca. Todos los derechos reservados.</p>
-    </footer>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        // Configuración de Firebase (deja la tuya)
-        const firebaseConfig = {
-             apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
-             authDomain: "saboresdeldistrito.firebaseapp.com",
-             projectId: "saboresdeldistrito",
-             storageBucket: "saboresdeldistrito.firebasestorage.app",
-             messagingSenderId: "814541339857",
-             appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const detalleContainer = document.getElementById("detalleContainer");
-
-        function getQueryParam(param) {
-            const params = new URLSearchParams(window.location.search);
-            return params.get(param);
+          `;
         }
 
-        function createInfoItem(iconClass, title, content, isHtml = false) {
-            if (!content || (Array.isArray(content) && content.length === 0)) return '';
-            
-            let contentHTML = isHtml ? content : `<span>${content}</span>`;
-            
-            return `
-                <div class="info-item">
-                    <strong><i class="${iconClass}"></i>${title}</strong>
-                    ${contentHTML}
-                </div>
-            `;
-        }
+        const redesHTML = createRedesSociales(v.redes || {});
 
-        // Ya no necesitamos esta función porque los íconos del comercio se cargan en el actions-section (aunque está oculto por defecto en el CSS que proporcionaste).
-        // Si quieres que los íconos de REDES SOCIALES DEL COMERCIO se muestren debajo del botón de WhatsApp, puedes eliminar la línea de CSS: `.content-section .redes-sociales { display: none; }`
-        function createRedesSociales(redes) {
-            const links = [];
-            const icons = {
-                instagram: 'fab fa-instagram',
-                facebook: 'fab fa-facebook-f',
-                tiktok: 'fab fa-tiktok',
-                email: 'fas fa-envelope',
-                web: 'fas fa-globe'
-            };
-            
-            for (const key in redes) {
-                if (redes[key]) {
-                    // Usamos el key como clase para el color
-                    links.push(`<a href="${redes[key]}" target="_blank" class="${key}"><i class="${icons[key]}"></i></a>`);
-                }
-            }
-            return links.length > 0 ? `<div class="redes-sociales">${links.join('')}</div>` : '';
-        }
+        detalleContainer.innerHTML = `
+          ${v.imagen ? `<img src="${v.imagen}" class="imagen-principal" alt="${v.nombre}">` : ""}
+          <div class="content-section">
+            <h1>${v.nombre || "Comercio sin nombre"}</h1>
+            <p class="tipo-distrito">${v.tipo || "Sin categoría"} en Distrito ${v.distrito || "?"}</p>
+            ${v.descripcion ? `<p class="descripcion">${v.descripcion}</p>` : ""}
+            <div class="info-grid">
+              ${createInfoItem('fas fa-map-marker-alt', 'Dirección', v.direccion || 'No especificada')}
+              ${createInfoItem('fas fa-phone', 'Teléfono', v.telefono || 'No disponible')}
+              ${createInfoItem('fas fa-calendar-alt', 'Días de apertura', (v.dias || []).join(", ") || 'No especificados')}
+              ${createInfoItem('fas fa-clock', 'Horarios', `<div class="horarios">${horariosHTML}</div>`, true)}
+              ${createInfoItem('fas fa-credit-card', 'Métodos de pago', (v.metodos_pago || []).join(", ") || 'No especificados')}
+            </div>
+            <div class="tags-container">
+              <div class="tags-title"><i class="fas fa-tag"></i> Etiquetas</div>
+              <div class="tags">
+                ${ tagsHTML || '<span class="tag" style="background:#fef9c3;color:#a16207;">Sin etiquetas</span>' }
+              </div>
+            </div>
+            <div class="actions-section">
+              ${ whatsappLink ? `<a href="${whatsappLink}" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Contactar por WhatsApp</a>` : ""}
+              ${ redesHTML }
+            </div>
+          </div>
+          ${ galeriaHTML }
+        `;
 
+      } catch (e) {
+        console.error("Error al cargar detalle:", e);
+        detalleContainer.innerHTML = `<p class="content-section" style="color:red;">Error al cargar los datos.</p>`;
+      }
+    }
 
-        async function cargarDetalle() {
-            const id = getQueryParam("id");
-            if (!id) {
-                detalleContainer.innerHTML = `<p class="content-section" style="color:red;">ID no proporcionado.</p>`;
-                return;
-            }
-            try {
-                const docRef = doc(db, "comercios", id);
-                const snap = await getDoc(docRef);
-                
-                if (!snap.exists()) {
-                    detalleContainer.innerHTML = `<p class="content-section" style="color:red;">No se encontró el comercio.</p>`;
-                    return;
-                }
-                
-                const v = snap.data();
-
-                // 1. WhatsApp link
-                let whatsappLink = "";
-                if (v.telefono) {
-                    const numero = v.telefono.replace(/[^0-9+]/g, "");
-                    whatsappLink = `https://wa.me/${numero}`;
-                }
-                
-                // 2. Horarios
-                const horariosHTML = (v.horarios || []).map(h => `<span>${h.apertura} - ${h.cierre}</span>`).join("");
-                
-                // 3. Etiquetas
-                const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join("");
-                
-                // 4. Galería
-                let galeriaHTML = "";
-                if (Array.isArray(v.galeria) && v.galeria.length > 0) {
-                    galeriaHTML = `<div class="galeria-container">
-                                        <div class="galeria-title">Otras imágenes</div>
-                                        <div class="galeria">` +
-                                            v.galeria.map(url => `<img src="${url}" alt="Galería de ${v.nombre}">`).join("") +
-                                        `</div>
-                                   </div>`;
-                }
-                
-                // 5. Redes del Comercio
-                const redesHTML = createRedesSociales(v.redes || {});
-
-                detalleContainer.innerHTML = `
-                    ${v.imagen ? `<img src="${v.imagen}" class="imagen-principal" alt="${v.nombre}">` : ""}
-                    
-                    <div class="content-section">
-                        <h1>${v.nombre || "Comercio sin nombre"}</h1>
-                        <p class="tipo-distrito">${v.tipo || "Sin Categoría"} en Distrito ${v.distrito || "?"}</p>
-                        
-                        ${v.descripcion ? `<p class="descripcion">${v.descripcion}</p>` : ""}
-
-                        <div class="info-grid">
-                            ${createInfoItem('fas fa-map-marker-alt', 'Dirección', v.direccion || 'No especificada')}
-                            ${createInfoItem('fas fa-phone', 'Teléfono', v.telefono || 'No disponible')}
-                            
-                            ${createInfoItem('fas fa-calendar-alt', 'Días de apertura', (v.dias || []).join(", ") || 'No especificados')}
-                            
-                            ${createInfoItem('fas fa-clock', 'Horarios', `<div class="horarios">${horariosHTML}</div>` || 'Cerrado / No especificado', true)}
-
-                            ${createInfoItem('fas fa-credit-card', 'Métodos de pago', (v.metodos_pago || []).join(", ") || 'No especificados')}
-                        </div>
-                        
-                        <div class="tags-container">
-                            <div class="tags-title"><i class="fas fa-tag"></i> Etiquetas</div>
-                            <div class="tags">
-                                ${tagsHTML || '<span class="tag" style="background:#fef9c3; color:#a16207;">Sin etiquetas</span>'}
-                            </div>
-                        </div>
-
-                        <div class="actions-section">
-                            ${ whatsappLink ? `<a href="${whatsappLink}" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Contactar por WhatsApp</a>` : ""}
-                            ${ redesHTML }
-                        </div>
-                        
-                    </div>
-                    
-                    ${galeriaHTML}
-                `;
-
-            } catch (e) {
-                console.error("Error al cargar detalle:", e);
-                detalleContainer.innerHTML = `<p class="content-section" style="color:red;">Error al cargar los datos. Verifique la consola.</p>`;
-            }
-        }
-
-        cargarDetalle();
-    </script>
+    cargarDetalle();
+  </script>
 </body>
 </html>
