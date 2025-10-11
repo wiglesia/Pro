@@ -59,11 +59,11 @@
             max-width: 900px;
             width: 95%;
             margin: 2rem auto;
-            padding: 0; /* Eliminamos el padding aquí, se aplicará dentro de las secciones */
+            padding: 0;
             background: var(--color-card);
             border-radius: 12px;
             box-shadow: var(--shadow-md);
-            overflow: hidden; /* Importante para el radio de las imágenes */
+            overflow: hidden;
         }
         
         /* ================================ */
@@ -71,7 +71,7 @@
         /* ================================ */
         .imagen-principal {
             width: 100%;
-            height: 400px; /* Altura fija para un look más consistente */
+            height: 400px;
             object-fit: cover;
             margin-bottom: 0;
             display: block;
@@ -113,7 +113,7 @@
         /* 📝 Contenido Principal */
         /* ================================ */
         .content-section {
-            padding: 2rem 2.5rem; /* Padding uniforme */
+            padding: 2rem 2.5rem;
         }
         
         .content-section h1 {
@@ -143,7 +143,7 @@
         /* ================================ */
         .info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Dos columnas en desktop */
+            grid-template-columns: 1fr 1fr;
             gap: 1.5rem 2rem;
             margin-top: 2rem;
         }
@@ -201,7 +201,7 @@
         }
         
         .tag {
-            background: #e0f2fe; /* Azul claro muy suave */
+            background: #e0f2fe;
             color: #0c4a6e;
             border-radius: 4px;
             padding: 0.4rem 0.9rem;
@@ -210,7 +210,7 @@
         }
 
         /* ================================ */
-        /* 📞 Botones de Acción y Redes */
+        /* 📞 Botones de Acción y Redes (en el Contenido) */
         /* ================================ */
         .actions-section {
             display: flex;
@@ -245,39 +245,13 @@
             box-shadow: 0 6px 8px rgba(37, 211, 102, 0.5);
         }
         
-        .redes-sociales {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
-            justify-content: center;
-            margin-top: 1rem;
+        /* Ocultamos las redes sociales dentro del content-section ya que las movimos al footer */
+        .content-section .redes-sociales {
+            display: none; 
         }
 
-        .redes-sociales a {
-            color: white;
-            background: var(--text-light); /* Gris neutro por defecto */
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: var(--transition);
-        }
-        
-        .redes-sociales a.instagram { background: #E4405F; }
-        .redes-sociales a.facebook { background: #3b5998; }
-        .redes-sociales a.tiktok { background: #000000; }
-        .redes-sociales a.web, .redes-sociales a.email { background: var(--color-primary); }
-
-        .redes-sociales a:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
         /* ================================ */
-        /* ⬇️ Pie de página (Footer) */
+        /* ⬇️ Pie de página (Footer) MODIFICADO */
         /* ================================ */
         footer {
             background: var(--color-primary);
@@ -285,10 +259,45 @@
             padding: 1.5rem;
             text-align: center;
             font-size: 0.9rem;
-            margin-top: auto; /* Mantiene el footer al fondo */
+            margin-top: auto;
+            /* Flexbox para alinear el contenido */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
-        footer a {
+        footer p {
+            margin-bottom: 0.5rem; /* Espacio entre el texto y los iconos */
+        }
+        
+        /* Estilos de los iconos en el Footer */
+        .footer-social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .footer-social-icons a {
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.1); /* Fondo sutil */
+        }
+
+        .footer-social-icons a:hover {
+            background: var(--color-secondary); /* Resaltado al pasar el ratón */
+            transform: scale(1.1);
+        }
+        
+        /* Colores específicos para los enlaces en el texto del footer (si los mantienes) */
+        footer a:not(.footer-social-icons a) {
             color: white;
             text-decoration: none;
             font-weight: 500;
@@ -296,7 +305,7 @@
             transition: opacity 0.3s;
         }
         
-        footer a:hover {
+        footer a:not(.footer-social-icons a):hover {
             opacity: 0.7;
         }
         
@@ -316,7 +325,7 @@
                 padding: 1.5rem;
             }
             .info-grid {
-                grid-template-columns: 1fr; /* Una columna en móviles */
+                grid-template-columns: 1fr;
             }
             .galeria-container {
                 padding: 1rem 1.5rem;
@@ -332,11 +341,13 @@
         <p class="content-section" style="text-align: center;">Cargando datos...</p>
     </main>
     <footer>
-        <p>Síguenos:
-            <a href="https://instagram.com/tu_igw_iglesia" target="_blank">Instagram</a> |
-            <a href="https://tuigwiglesia.com" target="_blank">Igw Iglesia</a> |
-            <a href="https://tusitio.com" target="_blank">Sitio Web</a>
-        </p>
+        <p>Conéctate con nosotros:</p>
+        <div class="footer-social-icons">
+            <a href="https://instagram.com/tu_igw_iglesia" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://tuigwiglesia.com" target="_blank" aria-label="Sitio Web"><i class="fas fa-globe"></i></a>
+            <a href="https://tusitio.com" target="_blank" aria-label="Contacto"><i class="fas fa-link"></i></a>
+            </div>
+        <p style="margin-top: 1rem; margin-bottom: 0; font-size: 0.8rem;">&copy; 2024 Tu Marca. Todos los derechos reservados.</p>
     </footer>
 
     <script type="module">
@@ -376,6 +387,8 @@
             `;
         }
 
+        // Ya no necesitamos esta función porque los íconos del comercio se cargan en el actions-section (aunque está oculto por defecto en el CSS que proporcionaste).
+        // Si quieres que los íconos de REDES SOCIALES DEL COMERCIO se muestren debajo del botón de WhatsApp, puedes eliminar la línea de CSS: `.content-section .redes-sociales { display: none; }`
         function createRedesSociales(redes) {
             const links = [];
             const icons = {
@@ -394,6 +407,7 @@
             }
             return links.length > 0 ? `<div class="redes-sociales">${links.join('')}</div>` : '';
         }
+
 
         async function cargarDetalle() {
             const id = getQueryParam("id");
@@ -415,7 +429,7 @@
                 // 1. WhatsApp link
                 let whatsappLink = "";
                 if (v.telefono) {
-                    const numero = v.telefono.replace(/[^0-9+]/g, ""); // Permitir '+' para códigos de país
+                    const numero = v.telefono.replace(/[^0-9+]/g, "");
                     whatsappLink = `https://wa.me/${numero}`;
                 }
                 
@@ -436,7 +450,7 @@
                                    </div>`;
                 }
                 
-                // 5. Redes
+                // 5. Redes del Comercio
                 const redesHTML = createRedesSociales(v.redes || {});
 
                 detalleContainer.innerHTML = `
