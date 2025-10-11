@@ -337,166 +337,169 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
-      authDomain: "saboresdeldistrito.firebaseapp.com",
-      projectId: "saboresdeldistrito",
-      storageBucket: "saboresdeldistrito.firebasestorage.app",
-      messagingSenderId: "814541339857",
-      appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
+  const firebaseConfig = {
+    apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
+    authDomain: "saboresdeldistrito.firebaseapp.com",
+    projectId: "saboresdeldistrito",
+    storageBucket: "saboresdeldistrito.firebasestorage.app",
+    messagingSenderId: "814541339857",
+    appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const detalleContainer = document.getElementById("detalleContainer");
+  const modal = document.getElementById("modalGaleria");
+  const modalImage = document.getElementById("modalImage");
+  const modalCloseBtn = document.getElementById("modalCloseBtn");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+
+  let galeriaImgs = [];
+  let currentIndex = 0;
+
+  function getQueryParam(param) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(param);
+  }
+
+  function createInfoItem(iconClass, title, content, isHtml = false) {
+    if (!content || (Array.isArray(content) && content.length === 0)) return "";
+    let contentHTML = isHtml ? content : `<span>${content}</span>`;
+    return `
+      <div class="info-item">
+        <strong><i class="${iconClass}"></i>${title}</strong>
+        ${contentHTML}
+      </div>
+    `;
+  }
+
+  function createRedesSociales(redes) {
+    const links = [];
+    const icons = {
+      instagram: 'fab fa-instagram',
+      facebook: 'fab fa-facebook-f',
+      tiktok: 'fab fa-tiktok',
+      email: 'fas fa-envelope',
+      web: 'fas fa-globe'
     };
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const detalleContainer = document.getElementById("detalleContainer");
-    const modal = document.getElementById("modalGaleria");
-    const modalImage = document.getElementById("modalImage");
-    const modalCloseBtn = document.getElementById("modalCloseBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    let galeriaImgs = [];
-    let currentIndex = 0;
-
-    function getQueryParam(param) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(param);
-    }
-
-    function createInfoItem(iconClass, title, content, isHtml = false) {
-      if (!content || (Array.isArray(content) && content.length === 0)) return '';
-      let contentHTML = isHtml ? content : `<span>${content}</span>`;
-      return `
-        <div class="info-item">
-          <strong><i class="${iconClass}"></i>${title}</strong>
-          ${contentHTML}
-        </div>
-      `;
-    }
-
-    function createRedesSociales(redes) {
-      const links = [];
-      const icons = {
-        instagram: 'fab fa-instagram',
-        facebook: 'fab fa-facebook-f',
-        tiktok: 'fab fa-tiktok',
-        email: 'fas fa-envelope',
-        web: 'fas fa-globe'
-      };
-      for (const key in redes) {
-        if (redes[key]) {
-          links.push(`<a href="${redes[key]}" target="_blank" class="${key}"><i class="${icons[key]}"></i></a>`);
-        }
+    for (const key in redes) {
+      if (redes[key]) {
+        links.push(`<a href="${redes[key]}" target="_blank" class="${key}"><i class="${icons[key]}"></i></a>`);
       }
-      return links.length > 0 ? `<div class="redes-sociales">${links.join('')}</div>` : '';
     }
+    return links.length > 0 ? `<div class="redes-sociales">${links.join('')}</div>` : "";
+  }
 
-    function openModal(index) {
-      currentIndex = index;
-      modalImage.src = galeriaImgs[currentIndex];
-      modal.classList.add("active");
+  function openModal(index) {
+    if (!galeriaImgs || galeriaImgs.length === 0) return;
+    currentIndex = index;
+    modalImage.src = galeriaImgs[currentIndex];
+    modal.classList.add("active");
+  }
+
+  function closeModal() {
+    modal.classList.remove("active");
+  }
+
+  function showNext() {
+    if (!galeriaImgs || galeriaImgs.length === 0) return;
+    currentIndex = (currentIndex + 1) % galeriaImgs.length;
+    modalImage.src = galeriaImgs[currentIndex];
+  }
+
+  function showPrev() {
+    if (!galeriaImgs || galeriaImgs.length === 0) return;
+    currentIndex = (currentIndex - 1 + galeriaImgs.length) % galeriaImgs.length;
+    modalImage.src = galeriaImgs[currentIndex];
+  }
+
+  modalCloseBtn.addEventListener("click", closeModal);
+  nextBtn.addEventListener("click", showNext);
+  prevBtn.addEventListener("click", showPrev);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  async function cargarDetalle() {
+    const id = getQueryParam("id");
+    if (!id) {
+      detalleContainer.innerHTML = `<p class="content-section" style="color:red;">ID no proporcionado.</p>`;
+      return;
     }
-
-    function closeModal() {
-      modal.classList.remove("active");
-    }
-
-    function showNext() {
-      if (galeriaImgs.length === 0) return;
-      currentIndex = (currentIndex + 1) % galeriaImgs.length;
-      modalImage.src = galeriaImgs[currentIndex];
-    }
-
-    function showPrev() {
-      if (galeriaImgs.length === 0) return;
-      currentIndex = (currentIndex - 1 + galeriaImgs.length) % galeriaImgs.length;
-      modalImage.src = galeriaImgs[currentIndex];
-    }
-
-    modalCloseBtn.onclick = closeModal;
-    nextBtn.onclick = showNext;
-    prevBtn.onclick = showPrev;
-    modal.onclick = (e) => {
-      if (e.target === modal) closeModal();
-    };
-
-    async function cargarDetalle() {
-      const id = getQueryParam("id");
-      if (!id) {
-        detalleContainer.innerHTML = `<p class="content-section" style="color:red;">ID no proporcionado.</p>`;
+    try {
+      const docRef = doc(db, "comercios", id);
+      const snap = await getDoc(docRef);
+      if (!snap.exists()) {
+        detalleContainer.innerHTML = `<p class="content-section" style="color:red;">No se encontró el comercio.</p>`;
         return;
       }
-      try {
-        const docRef = doc(db, "comercios", id);
-        const snap = await getDoc(docRef);
-        if (!snap.exists()) {
-          detalleContainer.innerHTML = `<p class="content-section" style="color:red;">No se encontró el comercio.</p>`;
-          return;
-        }
-        const v = snap.data();
+      const v = snap.data();
 
-        let whatsappLink = "";
-        if (v.telefono) {
-          const numero = v.telefono.replace(/[^0-9+]/g, "");
-          whatsappLink = `https://wa.me/${numero}`;
-        }
-        const horariosHTML = (v.horarios || []).map(h => `<span>${h.apertura} - ${h.cierre}</span>`).join("");
-        const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join("");
+      let whatsappLink = "";
+      if (v.telefono) {
+        const numero = v.telefono.replace(/[^0-9+]/g, "");
+        whatsappLink = `https://wa.me/${numero}`;
+      }
+      const horariosHTML = (v.horarios || []).map(h => `<span>${h.apertura} - ${h.cierre}</span>`).join("");
+      const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join("");
 
-        galeriaImgs = Array.isArray(v.galeria) ? v.galeria : [];
+      galeriaImgs = Array.isArray(v.galeria) ? v.galeria : [];
 
-        // Construir galería con onclick para abrir modal
-        let galeriaHTML = "";
-        if (galeriaImgs.length > 0) {
-          galeriaHTML = `
-            <div class="galeria-container">
-              <div class="galeria-title">Otras imágenes</div>
-              <div class="galeria">
-                ${galeriaImgs.map((url, idx) => `<img src="${url}" alt="Galería ${idx+1}" onclick="openModal(${idx})">`).join('')}
-              </div>
-            </div>
-          `;
-        }
-
-        const redesHTML = createRedesSociales(v.redes || {});
-
-        detalleContainer.innerHTML = `
-          ${v.imagen ? `<img src="${v.imagen}" class="imagen-principal" alt="${v.nombre}">` : ""}
-          <div class="content-section">
-            <h1>${v.nombre || "Comercio sin nombre"}</h1>
-            <p class="tipo-distrito">${v.tipo || "Sin categoría"} en Distrito ${v.distrito || "?"}</p>
-            ${v.descripcion ? `<p class="descripcion">${v.descripcion}</p>` : ""}
-            <div class="info-grid">
-              ${createInfoItem('fas fa-map-marker-alt', 'Dirección', v.direccion || 'No especificada')}
-              ${createInfoItem('fas fa-phone', 'Teléfono', v.telefono || 'No disponible')}
-              ${createInfoItem('fas fa-calendar-alt', 'Días de apertura', (v.dias || []).join(", ") || 'No especificados')}
-              ${createInfoItem('fas fa-clock', 'Horarios', `<div class="horarios">${horariosHTML}</div>`, true)}
-              ${createInfoItem('fas fa-credit-card', 'Métodos de pago', (v.metodos_pago || []).join(", ") || 'No especificados')}
-            </div>
-            <div class="tags-container">
-              <div class="tags-title"><i class="fas fa-tag"></i> Etiquetas</div>
-              <div class="tags">
-                ${ tagsHTML || '<span class="tag" style="background:#fef9c3;color:#a16207;">Sin etiquetas</span>' }
-              </div>
-            </div>
-            <div class="actions-section">
-              ${ whatsappLink ? `<a href="${whatsappLink}" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Contactar por WhatsApp</a>` : ""}
-              ${ redesHTML }
+      let galeriaHTML = "";
+      if (galeriaImgs.length > 0) {
+        galeriaHTML = `
+          <div class="galeria-container">
+            <div class="galeria-title">Otras imágenes</div>
+            <div class="galeria">
+              ${galeriaImgs.map((url, idx) =>
+                `<img src="${url}" alt="Galería ${idx+1}" onclick="openModal(${idx})">`
+              ).join('')}
             </div>
           </div>
-          ${ galeriaHTML }
         `;
-
-      } catch (e) {
-        console.error("Error al cargar detalle:", e);
-        detalleContainer.innerHTML = `<p class="content-section" style="color:red;">Error al cargar los datos.</p>`;
       }
-    }
 
-    cargarDetalle();
+      const redesHTML = createRedesSociales(v.redes || {});
+
+      detalleContainer.innerHTML = `
+        ${v.imagen ? `<img src="${v.imagen}" class="imagen-principal" alt="${v.nombre}">` : ""}
+        <div class="content-section">
+          <h1>${v.nombre || "Comercio sin nombre"}</h1>
+          <p class="tipo-distrito">${v.tipo || "Sin categoría"} en Distrito ${v.distrito || "?"}</p>
+          ${v.descripcion ? `<p class="descripcion">${v.descripcion}</p>` : ""}
+          <div class="info-grid">
+            ${createInfoItem('fas fa-map-marker-alt', 'Dirección', v.direccion || 'No especificada')}
+            ${createInfoItem('fas fa-phone', 'Teléfono', v.telefono || 'No disponible')}
+            ${createInfoItem('fas fa-calendar-alt', 'Días de apertura', (v.dias || []).join(", ") || 'No especificados')}
+            ${createInfoItem('fas fa-clock', 'Horarios', `<div class="horarios">${horariosHTML}</div>`, true)}
+            ${createInfoItem('fas fa-credit-card', 'Métodos de pago', (v.metodos_pago || []).join(", ") || 'No especificados')}
+          </div>
+          <div class="tags-container">
+            <div class="tags-title"><i class="fas fa-tag"></i> Etiquetas</div>
+            <div class="tags">
+              ${tagsHTML || '<span class="tag" style="background:#fef9c3;color:#a16207;">Sin etiquetas</span>'}
+            </div>
+          </div>
+          <div class="actions-section">
+            ${whatsappLink ? `<a href="${whatsappLink}" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Contactar por WhatsApp</a>` : ""}
+            ${redesHTML}
+          </div>
+        </div>
+        ${galeriaHTML}
+      `;
+    } catch (e) {
+      console.error("Error al cargar detalle:", e);
+      detalleContainer.innerHTML = `<p class="content-section" style="color:red;">Error al cargar los datos.</p>`;
+    }
+  }
+
+  cargarDetalle();
+</script>
+
   </script>
 </body>
 </html>
