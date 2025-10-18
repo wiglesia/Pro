@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sabores del Distrito</title>
+  <title>Catálogo de Comercios Locales - igw</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
   <style>
     :root {
       --color-primary: #2b4c7e;
@@ -59,6 +62,11 @@
       align-items: center;
       gap: 0.4rem;
     }
+    .datetime-container {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      text-align: center;
+    }
     .controls {
       display: flex;
       align-items: center;
@@ -80,7 +88,31 @@
       opacity: 0.9;
     }
     button.theme-toggle {
-      background: var(--color-accent);
+      background: transparent;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+    }
+    .categories {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      margin: 1rem auto;
+      width: 90%;
+      max-width: 900px;
+      justify-content: center;
+    }
+    .category-btn {
+      background: var(--color-card);
+      border: 1px solid #ccc;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+    .category-btn.active {
+      background: var(--color-primary);
       color: white;
     }
     .search-container {
@@ -88,7 +120,7 @@
       flex-direction: column;
       align-items: center;
       gap: 1rem;
-      margin: 2rem auto 1rem;
+      margin: 1rem auto;
       width: 90%;
       max-width: 900px;
     }
@@ -152,6 +184,12 @@
     input:checked + .slider:before {
       transform: translateX(26px);
     }
+    .results-info {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
     main {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -168,6 +206,12 @@
       box-shadow: 0 4px 12px var(--shadow);
       transition: var(--transition);
       position: relative;
+      opacity: 0; /* Para lazy loading */
+      transform: translateY(20px);
+    }
+    .card.loaded {
+      opacity: 1;
+      transform: translateY(0);
     }
     .card:hover {
       transform: translateY(-6px);
@@ -191,6 +235,51 @@
       color: var(--text-light);
       margin-bottom: 0.3rem;
     }
+    
+    /* == INICIO: CAMBIOS CSS (Insignias) == */
+    .nivel {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .nivel[data-nivel="bronce"] {
+      background: linear-gradient(145deg, #cd7f32, #a06628);
+      color: white;
+      text-shadow: 1px 1px 1px #5c3a16;
+    }
+    .nivel[data-nivel="plata"] {
+      background: linear-gradient(145deg, #e0e0e0, #b0b0b0);
+      color: #333;
+      text-shadow: 1px 1px 1px #ffffff;
+    }
+    .nivel[data-nivel="oro"] {
+      background: linear-gradient(145deg, #ffd700, #cfae00);
+      color: #3b2a00;
+      text-shadow: 1px 1px 1px #fff5c0;
+    }
+    .nivel[data-nivel="diamante"] {
+      background: linear-gradient(145deg, #b9f2ff, #8ad8ef);
+      color: #004a61;
+      text-shadow: 1px 1px 1px #ffffff;
+    }
+    .nivel .fa-medal {
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.5));
+    }
+    .nivel .fa-gem {
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.5));
+    }
+    /* == FIN: CAMBIOS CSS == */
+    
     .status {
       position: absolute;
       top: 10px;
@@ -226,6 +315,25 @@
       background: var(--color-primary);
       color: white;
     }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 2rem 0;
+      grid-column: 1 / -1;
+    }
+    .pagination button {
+      padding: 0.5rem 1rem;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     footer {
       background: var(--color-primary);
       color: white;
@@ -235,14 +343,17 @@
       font-size: 0.9rem;
     }
     @media (max-width: 768px) {
-      header { flex-direction: column; }
+      header { flex-direction: column; text-align: center; }
+      .datetime-container { order: 2; width: 100%; }
       .search-container { width: 95%; }
+      .categories { flex-wrap: wrap; }
     }
   </style>
 </head>
-<body>
+<body data-theme="light">
   <header>
-    <h1>🍽️ Sabores del Distrito</h1>
+    <h1>🏪 Catálogo de Comercios Locales</h1>
+    <div class="datetime-container" id="datetime"></div>
     <div class="controls">
       <select id="districtSelect">
         <option value="todos">Todos los distritos</option>
@@ -252,13 +363,22 @@
         <option value="4">Bella Vista</option>
         <option value="5">Villa Iglesia</option>
       </select>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙 Modo Oscuro</button>
+      <button class="theme-toggle" id="themeToggle">🌞</button>
     </div>
   </header>
 
+  <div class="categories">
+    <button class="category-btn active" data-category="todos">Todos</button>
+    <button class="category-btn" data-category="restaurantes">🍽️ Restaurantes</button>
+    <button class="category-btn" data-category="hoteles">🏨 Hoteles</button>
+    <button class="category-btn" data-category="peluquerias">✂️ Peluquerías</button>
+    <button class="category-btn" data-category="maxikioscos">🛒 Maxikioscos</button>
+    <button class="category-btn" data-category="supermercados">🏪 Supermercados</button>
+  </div>
+
   <section class="search-container">
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Buscar por nombre o categoría...">
+      <input type="text" id="searchInput" placeholder="Buscar por nombre, categoría o tags...">
     </div>
     <div class="toggle-container">
       <span>Ver:</span>
@@ -266,19 +386,22 @@
         <input type="checkbox" id="toggleActivos" checked>
         <span class="slider"></span>
       </label>
-      <span id="toggleLabel">Solo activos</span>
+      <span id="toggleLabel">Solo abiertos</span>
     </div>
   </section>
+
+  <div class="results-info" id="resultsInfo"></div>
 
   <main id="vendorsList"></main>
 
   <footer>
-    © 2025 Sabores del Distrito — Plataforma Comunitaria
+    igw - iglesia web
   </footer>
-
+  
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
@@ -295,98 +418,264 @@
     const contenedor = document.getElementById('vendorsList');
     const input = document.getElementById('searchInput');
     const selectDistrito = document.getElementById('districtSelect');
+    const categoryBtns = document.querySelectorAll('.category-btn');
     const checkbox = document.getElementById('toggleActivos');
     const label = document.getElementById('toggleLabel');
+    const resultsInfo = document.getElementById('resultsInfo');
+    const datetimeEl = document.getElementById('datetime');
+    const themeToggle = document.getElementById('themeToggle');
     let mostrarSoloActivos = true;
     let vendedores = [];
+    let currentPage = 1;
+    const itemsPerPage = 20;
+    let selectedCategory = 'todos';
+    let userLocation = null;
+    const maxDistanceKm = 10; // Distancia máxima para "cerca" (ajustable)
 
     function toggleTheme() {
-      document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+      const currentTheme = document.body.dataset.theme;
+      document.body.dataset.theme = currentTheme === 'dark' ? 'light' : 'dark';
+      themeToggle.textContent = document.body.dataset.theme === 'dark' ? '🌙' : '🌞';
+    }
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Actualizar hora y fecha
+    function updateDatetime() {
+      const now = new Date();
+      datetimeEl.textContent = now.toLocaleString('es-ES');
+    }
+    setInterval(updateDatetime, 1000);
+    updateDatetime();
+
+    // Calcular distancia (fórmula de Haversine aproximada)
+    function getDistance(lat1, lng1, lat2, lng2) {
+      const R = 6371; // Radio de la Tierra en km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = R * c;
+      return distance;
     }
 
+    // Geolocalización
+    function getUserLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            console.log('Ubicación obtenida:', userLocation);
+            
+            // == INICIO: MEJORA GEOLOCALIZACIÓN ==
+            // Añadir opción "Cerca de mí" si no existe
+            if (!document.querySelector('option[value="cerca"]')) {
+                const option = document.createElement('option');
+                option.value = 'cerca';
+                option.textContent = '📍 Cerca de mí';
+                selectDistrito.prepend(option);
+            }
+            selectDistrito.value = 'cerca'; // Auto-seleccionar
+            // == FIN: MEJORA GEOLOCALIZACIÓN ==
+            
+            renderVendedores();
+          },
+          (error) => {
+            console.warn('Geolocalización denegada o error:', error);
+            renderVendedores();
+          }
+        );
+      } else {
+        console.warn('Geolocalización no soportada');
+        renderVendedores();
+      }
+    }
+    
+    // == INICIO: CAMBIOS JS (Lógica de horario) ==
     function estaAbierto(v) {
-  const ahora = new Date();
-  const diaActual = ahora.toLocaleString('es-ES', { weekday: 'long' }).toLowerCase();
-  const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
+      const ahora = new Date();
+      // Mapea getDay() (0=Domingo, 1=Lunes...) a los valores del admin
+      const diasSemana = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+      const diaActual = diasSemana[ahora.getDay()]; // ej: "sábado"
+      const horaActual = ahora.getHours() + ahora.getMinutes() / 60; // ej: 14.5
 
-  // Validar días definidos
-  if (!v.dias || !Array.isArray(v.dias) || !v.dias.includes(diaActual)) {
-    return false;
-  }
+      // 1. ¿El local marcó que abre hoy?
+      if (!v.dias || !Array.isArray(v.dias) || !v.dias.includes(diaActual)) {
+        return false;
+      }
 
-  let franjas = [];
-  if (Array.isArray(v.horarios)) {
-    franjas = v.horarios;
-  } else if (v.horario) {
-    franjas = [v.horario];
-  } else {
-    return false;
-  }
+      // 2. ¿Tiene una estructura de horarios válida?
+      if (!v.horarios || typeof v.horarios !== 'object') {
+        return false;
+      }
 
-  return franjas.some(h => {
-    if (!h.apertura || !h.cierre) return false;
+      // 3. Determinar qué conjunto de horarios usar
+      let franjasDelDia = [];
+      if (diaActual === 'sábado') {
+        franjasDelDia = v.horarios.sabado || [];
+      } else if (diaActual === 'domingo') {
+        franjasDelDia = v.horarios.domingo || [];
+      } else {
+        // Es un día de Lunes a Viernes
+        franjasDelDia = v.horarios.semana || [];
+      }
 
-    const [hA, mA] = h.apertura.split(':').map(Number);
-    const [hC, mC] = h.cierre.split(':').map(Number);
-    const horaA = hA + mA / 60;
-    const horaC = hC + mC / 60;
+      // Si el día está marcado pero no se cargaron horas, se asume cerrado.
+      if (franjasDelDia.length === 0) {
+        return false;
+      }
 
-    // Si cruza la medianoche
-    if (horaA > horaC) {
-      return horaActual >= horaA || horaActual <= horaC;
-    } else {
-      return horaActual >= horaA && horaActual <= horaC;
+      // 4. Comprobar si la hora actual está en alguna de las franjas
+      return franjasDelDia.some(h => {
+        if (!h.apertura || !h.cierre) return false;
+
+        const [hA, mA] = h.apertura.split(':').map(Number);
+        const [hC, mC] = h.cierre.split(':').map(Number);
+        const horaA = hA + mA / 60;
+        const horaC = hC + mC / 60;
+
+        // Caso 1: Cierra después de la medianoche (ej: 20:00 - 02:00)
+        if (horaA > horaC) {
+          // Está abierto si es más tarde que la apertura O más temprano que el cierre
+          return horaActual >= horaA || horaActual < horaC;
+        } else {
+          // Caso 2: Cierra el mismo día (ej: 09:00 - 17:00)
+          return horaActual >= horaA && horaActual < horaC;
+        }
+      });
     }
-  });
-}
-
+    
+    // Función para generar HTML de la insignia
+    function getNivelHtml(nivel) {
+        switch (nivel) {
+            case 'bronce':
+                return '<i class="fas fa-medal"></i> Bronce';
+            case 'plata':
+                return '<i class="fas fa-medal"></i> Plata';
+            case 'oro':
+                return '<i class="fas fa-medal"></i> Oro';
+            case 'diamante':
+                return '<i class="fas fa-gem"></i> Diamante';
+            default:
+                return '<i class="fas fa-medal"></i> Bronce';
+        }
+    }
+    // == FIN: CAMBIOS JS ==
 
     function renderVendedores() {
-  contenedor.innerHTML = '';
-  const busqueda = input.value.toLowerCase();
-  const distrito = selectDistrito.value;
+      contenedor.innerHTML = '';
+      const busqueda = input.value.toLowerCase();
+      const distrito = selectDistrito.value;
 
-  let filtrados = vendedores.filter(v =>
-    (v.nombre && v.nombre.toLowerCase().includes(busqueda)) ||
-    (v.tipo && v.tipo.toLowerCase().includes(busqueda)) ||
-    (v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda)))
-  );
-  filtrados = filtrados.filter(v => (distrito === "todos" || v.distrito == distrito));
+      let filtrados = vendedores.filter(v =>
+        (v.nombre && v.nombre.toLowerCase().includes(busqueda)) ||
+        (v.categoria && v.categoria.toLowerCase().includes(busqueda)) || // CORREGIDO: v.tipo -> v.categoria
+        (v.tags && v.tags.some(tag => tag.toLowerCase().includes(busqueda)))
+      );
+      
+      // == INICIO: CORRECCIÓN FILTRO DISTRITO/CERCANÍA ==
+      if (distrito === 'cerca' && userLocation) {
+          filtrados = filtrados.filter(v => {
+              if (!v.ubicacion) return false; // Ocultar si no tiene ubicación
+              const distance = getDistance(userLocation.lat, userLocation.lng, v.ubicacion.lat, v.ubicacion.lng);
+              return distance <= maxDistanceKm;
+          });
+      } else if (distrito !== 'todos') {
+          filtrados = filtrados.filter(v => v.distrito == distrito);
+      }
+      // == FIN: CORRECCIÓN FILTRO ==
 
-  console.log("IDs tras búsqueda/distrito:", filtrados.map(v => v.id));
+      // Filtrar por categoría
+      if (selectedCategory !== 'todos') {
+        filtrados = filtrados.filter(v => v.categoria === selectedCategory);
+      }
 
-  if (mostrarSoloActivos) {
-    filtrados = filtrados.filter(v => {
-      const open = estaAbierto(v);
-      console.log("Chequeo v.id:", v.id, "open:", open, "dias:", v.dias, "horarios:", v.horarios);
-      return open;
-    });
-    console.log("IDs tras filtro activos:", filtrados.map(v => v.id));
-  }
+      if (mostrarSoloActivos) {
+        filtrados = filtrados.filter(v => estaAbierto(v));
+      }
 
-  if (filtrados.length === 0) {
-    contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;">😕 No se encontraron resultados</p>`;
-    return;
-  }
+      // Paginación
+      const totalPages = Math.ceil(filtrados.length / itemsPerPage);
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageItems = filtrados.slice(start, end);
 
-  filtrados.forEach(v => {
-    const activo = estaAbierto(v);
-    const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-    contenedor.innerHTML += `
-      <a href="detalle.html?id=${v.id}" style="text-decoration:none;color:inherit;">
-        <div class="card">
-          <img src="${v.imagen}" alt="${v.nombre}">
+      resultsInfo.textContent = `Mostrando ${pageItems.length} de ${filtrados.length} resultados (Página ${currentPage} de ${totalPages})`;
+
+      if (pageItems.length === 0) {
+        contenedor.innerHTML = `<p style="grid-column:1/-1;text-align:center;">😕 No se encontraron resultados</p>`;
+        return;
+      }
+
+      pageItems.forEach(v => {
+        const activo = estaAbierto(v);
+        const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        const nivel = v.nivel || 'bronce';
+        const categoria = v.categoria || 'Sin categoría'; // CORREGIDO: v.tipo -> v.categoria
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${v.imagen}" alt="${v.nombre}" loading="lazy">
           <span class="status ${activo ? '' : 'closed'}">${activo ? 'Abierto' : 'Cerrado'}</span>
+          
+          <span class="nivel" data-nivel="${nivel}">${getNivelHtml(nivel)}</span>
+          
           <div class="card-content">
             <h3>${v.nombre}</h3>
-            <p>${v.tipo}</p>
+            <p>${categoria}</p>
             <div class="tags">${tagsHTML}</div>
           </div>
-        </div>
-      </a>`;
-  });
-}
+        `;
+        card.addEventListener('click', () => {
+          // Incrementar visualizaciones
+          updateDoc(doc(db, "comercios", v.id), {
+            visualizaciones: (v.visualizaciones || 0) + 1
+          });
+          window.location.href = `detalle.html?id=${v.id}`;
+        });
 
+        // Lazy loading
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              card.classList.add('loaded');
+              observer.unobserve(card);
+            }
+          });
+        });
+        observer.observe(card);
+
+        contenedor.appendChild(card);
+      });
+
+      // Paginación
+      const pagination = document.createElement('div');
+      pagination.className = 'pagination';
+      if (currentPage > 1) {
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = 'Anterior';
+        prevBtn.addEventListener('click', () => {
+          currentPage--;
+          renderVendedores();
+        });
+        pagination.appendChild(prevBtn);
+      }
+      if (currentPage < totalPages) {
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'Siguiente';
+        nextBtn.addEventListener('click', () => {
+          currentPage++;
+          renderVendedores();
+        });
+        pagination.appendChild(nextBtn);
+      }
+      contenedor.appendChild(pagination);
+    }
 
     async function cargarComercios() {
       try {
@@ -395,30 +684,47 @@
           id: doc.id,
           ...doc.data()
         }));
-        console.log("Todos vendedores:", vendedores.map(v => v.id));
-        renderVendedores();
+        getUserLocation(); // Llama a geolocalización después de cargar
       } catch (e) {
         console.error("Error al cargar", e);
         contenedor.innerHTML = `<p style="color:red;">Error al cargar comercios.</p>`;
       }
     }
 
-    input.addEventListener('input', renderVendedores);
-    selectDistrito.addEventListener('change', renderVendedores);
+    input.addEventListener('input', () => {
+      currentPage = 1;
+      renderVendedores();
+    });
+    selectDistrito.addEventListener('change', () => {
+      currentPage = 1;
+      renderVendedores();
+    });
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedCategory = btn.dataset.category;
+        currentPage = 1;
+        renderVendedores();
+      });
+    });
     checkbox.addEventListener('change', () => {
       mostrarSoloActivos = checkbox.checked;
-      label.textContent = checkbox.checked ? "Solo activos" : "Todos los locales";
+      label.textContent = checkbox.checked ? "Solo abiertos" : "Todos los locales";
+      currentPage = 1;
       renderVendedores();
     });
 
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.body.dataset.theme = 'dark';
+      themeToggle.textContent = '🌙';
     }
 
     cargarComercios();
     setInterval(() => {
+      // Recalcular estado abierto/cerrado cada 2 minutos
       renderVendedores();
-    }, 120000);
+    }, 60000);
   </script>
 </body>
 </html>
