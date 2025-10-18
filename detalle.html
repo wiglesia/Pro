@@ -3,342 +3,517 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Detalle del Comercio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512‑SnH5WK+bZxgPHs44uWIX+LLMDJ8gI0k7JmE0C4pL7p5I8F0y/p9H6T8I7Lh01C4w7s60Q4o7Jk0T2A2gQ0g=" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Detalle del Comercio - igw</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
-      --color-primary: #1e3a8a;
-      --color-secondary: #0d9488;
-      --color-whatsapp: #25D366;
-      --color-bg: #f4f6f8;
+      --color-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --color-accent: #10b981;
+      --color-danger: #ef4444;
+      --color-warning: #f59e0b;
+      --color-bg: #f8fafc;
       --color-card: #ffffff;
+      --color-secondary: #e2e8f0;
       --text-dark: #1f2937;
       --text-light: #6b7280;
-      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-      --transition: all 0.3s ease;
+      --border-color: #e5e7eb;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius: 12px;
     }
-    body {
-      font-family: 'Poppins', sans-serif;
+
+    [data-theme="dark"] {
+      --color-bg: #1e1f23;
+      --color-card: #2a2b31;
+      --text-dark: #f0f0f0;
+      --text-light: #aaa;
+      --shadow: rgba(255,255,255,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
       background: var(--color-bg);
       color: var(--text-dark);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
+
     header {
       background: var(--color-primary);
       color: white;
-      padding: 1.5rem 0;
-      text-align: center;
-      box-shadow: var(--shadow-md);
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--shadow-lg);
     }
+
     header h1 {
-      margin: 0;
-      font-size: 1.75rem;
-      font-weight: 700;
-    }
-    main {
-      flex: 1;
-      max-width: 900px;
-      width: 95%;
-      margin: 2rem auto;
-      background: var(--color-card);
-      border-radius: 12px;
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-    }
-    .imagen-principal {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      display: block;
-    }
-    .content-section {
-      padding: 2rem 2.5rem;
-    }
-    .content-section h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: var(--color-primary);
-    }
-    .tipo-distrito {
-      color: var(--text-light);
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-    }
-    .descripcion {
-      font-size: 1rem;
-      line-height: 1.7;
-      margin-top: 1.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid #eee;
-    }
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem 2rem;
-      margin-top: 2rem;
-    }
-    .info-item {
-      font-size: 0.95rem;
-    }
-    .info-item strong {
-      display: block;
+      font-size: 1.4rem;
       font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 0.2rem;
       display: flex;
       align-items: center;
+      gap: 0.5rem;
     }
-    .info-item strong i {
-      margin-right: 8px;
-      color: var(--color-secondary);
-    }
-    .info-item span {
-      display: block;
-      color: var(--text-light);
-    }
-    .info-item .horarios span {
-      line-height: 1.2;
-      margin-top: 0.4rem;
-    }
-    .tags-container {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #eee;
-    }
-    .tags-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      color: var(--text-dark);
+
+    header .controls {
       display: flex;
       align-items: center;
-    }
-    .tags-title i {
-      margin-right: 6px;
-    }
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-    .tag {
-      background: #e0f2fe;
-      color: #0c4a6e;
-      border-radius: 4px;
-      padding: 0.4rem 0.9rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    .actions-section {
-      margin-top: 2.5rem;
-      display: flex;
-      flex-direction: column;
       gap: 1rem;
     }
-    .btn-whatsapp {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-whatsapp);
+
+    button.theme-toggle {
+      background: transparent;
       color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      font-size: 1.1rem;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    button.theme-toggle:hover {
+      opacity: 0.8;
+    }
+
+    header a {
+      background: white;
+      color: #667eea;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius);
       text-decoration: none;
       font-weight: 600;
       transition: var(--transition);
-      box-shadow: 0 4px 6px rgba(37,211,102,0.4);
-    }
-    .btn-whatsapp i {
-      margin-right: 10px;
-      font-size: 1.2rem;
-    }
-    .btn-whatsapp:hover {
-      background: #1ebe5b;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px rgba(37,211,102,0.5);
-    }
-    .galeria-container {
-      padding: 1rem 2rem;
-      border-top: 1px solid #e5e7eb;
-      margin-top: 1.5rem;
-    }
-    .galeria-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 0.8rem;
-    }
-    .galeria {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 10px;
-    }
-    .galeria img {
-      width: 100%;
-      height: 100px;
-      border-radius: 6px;
-      object-fit: cover;
-      transition: transform 0.3s;
-      cursor: zoom-in;
-    }
-    .galeria img:hover {
-      transform: scale(1.03);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    /* Modal / Lightbox Styles */
+    header a:hover {
+      background: #e2e8f0;
+      transform: translateY(-1px);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--color-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .hero {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .main-image {
+      width: 100%;
+      height: 400px;
+      border-radius: var(--radius);
+      object-fit: cover;
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 1rem;
+      border-radius: var(--radius);
+      max-width: 300px;
+    }
+
+    .hero-overlay h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-overlay p {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .nivel {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      background: #cd7f32; /* Default bronce */
+    }
+
+        .nivel[data-nivel="plata"] { background: #c0c0c0; }
+    .nivel[data-nivel="oro"] { background: #ffd700; }
+    .nivel[data-nivel="diamante"] { background: #b9f2ff; }
+
+    .status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .open { background: var(--color-accent); }
+    .closed { background: var(--color-danger); }
+
+    .section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #764ba2f9;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section h3 {
+      color: #667eea;
+      text-shadow: 0px 1px 10px #1e1f23;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-item i {
+      color: #667eea;
+      text-shadow: 0px 1px 5px black;
+      font-size: 1.2rem;
+    }
+
+    .dias-activos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .dia-badge {
+      background: var(--color-accent);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .horarios-lista {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .horarios-lista li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .horarios-lista li:last-child {
+      border-bottom: none;
+    }
+
+    .horarios-lista .dia {
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .horarios-lista .franjas {
+      color: #1bda9b;
+      font-size: 0.9rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      background: #e8e8e8;
+      color: #333;
+      border-radius: 20px;
+      padding: 0.4rem 1rem;
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+
+    .tag:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    [data-theme="dark"] .tag {
+      background: #3a3b40;
+      color: #ddd;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+
+    .map-container {
+      height: 70px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .map-link {
+      display: inline-block;
+      margin-top: 1rem;
+      background: var(--color-accent);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .map-link:hover {
+      background: #0c9e6e;
+      transform: translateY(-2px);
+    }
+
+    .social-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .social-btn {
+      background: #667eea;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 1px 5px black;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .social-btn:hover {
+      background: #5a67d8;
+      transform: translateY(-2px);
+      box-shadow: 0 1px 5px white;
+    }
+
+    .whatsapp-btn {
+      background: #25d366;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      transition: var(--transition);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128c7e;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
     .modal {
-      display: none;
       position: fixed;
-      z-index: 9999;
-      left: 0;
       top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
     }
-    .modal.active {
-      display: flex;
+
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
     }
+
     .modal-content {
-      position: relative;
       max-width: 90%;
       max-height: 90%;
+      background: var(--color-card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
     }
+
     .modal-content img {
       width: 100%;
       height: auto;
-      border-radius: 8px;
+      display: block;
     }
+
     .modal-close {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 1rem;
+      right: 1rem;
+      background: var(--color-danger);
       color: white;
-      font-size: 2rem;
-      cursor: pointer;
-      background: rgba(0,0,0,0.4);
       border: none;
-      border-radius: 4px;
+      border-radius: 50%;
       width: 40px;
       height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-nav {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-    }
-    .modal-nav button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 2rem;
+      font-size: 1.5rem;
       cursor: pointer;
-      padding: 0 20px;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      background: #c52d3d;
+    }
+
+    .visualizaciones {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-top: 0.5rem;
     }
 
     footer {
       background: var(--color-primary);
       color: white;
-      padding: 1.5rem;
       text-align: center;
-      font-size: 0.9rem;
+      padding: 1.2rem;
       margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .footer-social-icons {
-      display: flex;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    .footer-social-icons a {
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      background: rgba(255,255,255,0.1);
-      transition: var(--transition);
-    }
-    .footer-social-icons a:hover {
-      background: var(--color-secondary);
-      transform: scale(1.1);
-    }
-    footer a:not(.footer-social-icons a) {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      margin: 0 0.75rem;
-      transition: opacity 0.3s;
-    }
-    footer a:not(.footer-social-icons a):hover {
-      opacity: 0.7;
+      font-size: 0.9rem;
     }
 
     @media (max-width: 768px) {
-      .imagen-principal {
-        height: 250px;
+      header {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+      }
+      header .controls {
+        margin-top: 1rem;
       }
       main {
-        margin: 1rem auto;
-        width: 100%;
-        border-radius: 0;
+        margin: 1.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 10px #764ba2;
+      }
+      .hero-overlay {
+        position: static;
+        background: none;
+        color: var(--text-dark);
+        margin-top: 1rem;
       }
       .info-grid {
         grid-template-columns: 1fr;
       }
+      .gallery {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+      .social-buttons {
+        justify-content: center;
+      }
+      .map-container {
+        height: 70px;
+      }
+      .horarios-lista li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
     }
   </style>
 </head>
-<body>
+<body data-theme="light">
   <header>
-    <h1>Sabores del Distrito</h1>
-  </header>
-  <main id="detalleContainer">
-    <p class="content-section" style="text-align: center;">Cargando datos...</p>
-  </main>
-  <footer>
-    <p>Conéctate con nosotros:</p>
-    <div class="footer-social-icons">
-      <a href="https://instagram.com/tu_igw_iglesia" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="https://tuigwiglesia.com" target="_blank" aria-label="Sitio Web"><i class="fas fa-globe"></i></a>
-      <a href="https://tusitio.com" target="_blank" aria-label="Contacto"><i class="fas fa-link"></i></a>
+    <h1><i class="fas fa-store"></i> Detalle del Comercio</h1>
+    <div class="controls">
+      <button class="theme-toggle" id="themeToggle">🌞</button>
+      <a href="index.html"><i class="fas fa-arrow-left"></i> Volver al catálogo</a>
     </div>
-    <p style="margin-top:1rem; margin-bottom:0; font-size:0.8rem;">&copy; 2025 Sabores del Distrito</p>
+  </header>
+
+  <main id="detalleContainer">
+    <div class="loader" style="text-align: center; padding: 2rem;">Cargando información del comercio...</div>
+  </main>
+
+  <footer>
+    igw - iglesia web
   </footer>
 
-  <div class="modal" id="modalGaleria">
-    <button class="modal-close" id="modalCloseBtn">&times;</button>
+  <div id="imageModal" class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-content">
-      <img src="" alt="Imagen del comercio" id="modalImage">
-    </div>
-    <div class="modal-nav">
-      <button id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-      <button id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+      <img id="modalImage" src="" alt="Imagen ampliada">
     </div>
   </div>
-
-  <script type="module">
+    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
@@ -348,157 +523,240 @@
       messagingSenderId: "814541339857",
       appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
     };
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const detalleContainer = document.getElementById("detalleContainer");
-    const modal = document.getElementById("modalGaleria");
-    const modalImage = document.getElementById("modalImage");
-    const modalCloseBtn = document.getElementById("modalCloseBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
+    const themeToggle = document.getElementById('themeToggle');
+    const detalleContainer = document.getElementById('detalleContainer');
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
 
-    let galeriaImgs = [];
-    let currentIndex = 0;
+    // Toggle tema
+    function toggleTheme() {
+      const currentTheme = document.body.dataset.theme;
+      document.body.dataset.theme = currentTheme === 'dark' ? 'light' : 'dark';
+      themeToggle.textContent = document.body.dataset.theme === 'dark' ? '🌙' : '🌞';
+    }
+    themeToggle.addEventListener('click', toggleTheme);
 
-    function getQueryParam(param) {
+    // Obtener ID de URL
+    function getIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
-      return params.get(param);
+      return params.get("id");
     }
 
-    function createInfoItem(iconClass, title, content, isHtml = false) {
-      if (!content || (Array.isArray(content) && content.length === 0)) return "";
-      let contentHTML = isHtml ? content : `<span>${content}</span>`;
-      return `
-        <div class="info-item">
-          <strong><i class="${iconClass}"></i>${title}</strong>
-          ${contentHTML}
+    // Verificar si está abierto
+   // Verificar si está abierto
+function estaAbierto(v) {
+  const ahora = new Date();
+  const diaActual = ahora.toLocaleString('es-ES', { weekday: 'long' }).toLowerCase();
+  const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
+
+  if (!v.dias || !Array.isArray(v.dias) || !v.dias.includes(diaActual)) {
+    return false;
+  }
+
+  let franjas = [];
+  if (v.horarios) {
+    if (diaActual === 'sábado' && v.horarios.sabado) {
+      franjas = v.horarios.sabado;
+    } else if (diaActual === 'domingo' && v.horarios.domingo) {
+      franjas = v.horarios.domingo;
+    } else if (v.horarios.semana) {
+      franjas = v.horarios.semana;
+    }
+  }
+
+  return franjas.some(h => {
+    if (!h.apertura || !h.cierre) return false;
+    const [hA, mA] = h.apertura.split(':').map(Number);
+    const [hC, mC] = h.cierre.split(':').map(Number);
+    const horaA = hA + mA / 60;
+    const horaC = hC + mC / 60;
+    if (horaA > horaC) {
+      return horaActual >= horaA || horaActual <= horaC;
+    } else {
+      return horaActual >= horaA && horaActual <= horaC;
+    }
+  });
+}
+
+    // Formato de horarios (mejorado para lista)
+    function formatoHorario(v) {
+      if (!v.horarios) return "<li>No informado</li>";
+      let html = "";
+      if (v.horarios.semana) {
+        const franjas = v.horarios.semana.map(f => `${f.apertura} - ${f.cierre}`).join(', ');
+        html += `<li><span class="dia">Lunes a Viernes</span><span class="franjas">${franjas}</span></li>`;
+      }
+      if (v.horarios.sabado) {
+        const franjas = v.horarios.sabado.map(f => `${f.apertura} - ${f.cierre}`).join(', ');
+        html += `<li><span class="dia">Sábado</span><span class="franjas">${franjas}</span></li>`;
+      }
+      if (v.horarios.domingo) {
+        const franjas = v.horarios.domingo.map(f => `${f.apertura} - ${f.cierre}`).join(', ');
+        html += `<li><span class="dia">Domingo</span><span class="franjas">${franjas}</span></li>`;
+      }
+      return html || "<li>No informado</li>";
+    }
+
+    // Cargar detalle
+    async function cargarDetalle() {
+      const id = getIdFromUrl();
+      if (!id) {
+        detalleContainer.innerHTML = "<p>⚠️ ID de comercio no proporcionado.</p>";
+        return;
+      }
+
+      try {
+        const docRef = doc(db, "comercios", id);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+          detalleContainer.innerHTML = "<p>⚠️ Comercio no encontrado.</p>";
+          return;
+        }
+
+        const v = { id: docSnap.id, ...docSnap.data() };
+
+        // Incrementar visualizaciones
+        await updateDoc(docRef, {
+          visualizaciones: (v.visualizaciones || 0) + 1
+        });
+
+        renderDetalle(v);
+      } catch (error) {
+        console.error('Error cargando detalle:', error);
+        detalleContainer.innerHTML = "<p>❌ Error al cargar el comercio.</p>";
+      }
+    }
+
+    // Render detalle
+    function renderDetalle(v) {
+      const abierto = estaAbierto(v);
+      const estado = abierto ? "Abierto ahora" : "Cerrado";
+      const nivel = v.nivel || 'bronce';
+      const categoria = v.categoria || v.tipo || 'Sin categoría';
+      const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+      const galeriaHTML = (v.galeria || []).map(img => `<img src="${img}" alt="Foto del local" onclick="openModal('${img}')">`).join('');
+      const diasHTML = (v.dias || []).map(d => `<span class="dia-badge">${d}</span>`).join('');
+
+      const redes = v.redes || {};
+      const socialButtons = [];
+      if (redes.instagram) socialButtons.push(`<a href="${redes.instagram}" target="_blank" class="social-btn"><i class="fab fa-instagram"></i> Instagram</a>`);
+      if (redes.facebook) socialButtons.push(`<a href="${redes.facebook}" target="_blank" class="social-btn"><i class="fab fa-facebook"></i> Facebook</a>`);
+      if (redes.tiktok) socialButtons.push(`<a href="${redes.tiktok}" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i> TikTok</a>`);
+      if (redes.web) socialButtons.push(`<a href="${redes.web}" target="_blank" class="social-btn"><i class="fas fa-globe"></i> Sitio Web</a>`);
+      if (redes.email) socialButtons.push(`<a href="mailto:${redes.email}" class="social-btn"><i class="fas fa-envelope"></i> Email</a>`);
+
+      const whatsappBtn = v.whatsapp ? `<a href="https://wa.me/${v.whatsapp.replace(/\D/g, '')}?text=Hola, vi tu comercio en el catálogo." target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : '';
+
+      let mapaHTML = '';
+if (v.mapLink) {
+  // Si hay un link personalizado, usar un botón que lo abra
+  mapaHTML = `<a href="${v.mapLink}" target="_blank" class="map-link"><i class="fas fa-map-marked-alt"></i> Ver mapa personalizado</a>`;
+} else if (v.ubicacion && v.ubicacion.lat && v.ubicacion.lng) {
+  // Enlace directo a Google Maps con coordenadas
+  mapaHTML = `<a href="https://www.google.com/maps/search/?api=1&query=${v.ubicacion.lat},${v.ubicacion.lng}" target="_blank" class="map-link"><i class="fas fa-directions"></i> Cómo llegar</a>`;
+} else {
+  // Enlace a Google Maps con dirección
+  const direccionEncoded = encodeURIComponent(v.direccion || 'Dirección no disponible');
+  mapaHTML = `<a href="https://www.google.com/maps/search/?api=1&query=${direccionEncoded}" target="_blank" class="map-link"><i class="fas fa-map-marked-alt"></i> Ver en Google Maps</a>`;
+}
+
+
+      detalleContainer.innerHTML = `
+        <div class="hero">
+          <img class="main-image" src="${v.imagen}" alt="${v.nombre}">
+          <div class="hero-overlay">
+            <h2>${v.nombre}</h2>
+            <p>${categoria}</p>
+            <span class="status ${abierto ? 'open' : 'closed'}">${estado}</span>
+            <div class="visualizaciones"><i class="fas fa-eye"></i> ${v.visualizaciones || 0} visualizaciones</div>
+          </div>
+          <span class="nivel" data-nivel="${nivel}">${nivel.charAt(0).toUpperCase() + nivel.slice(1)}</span>
         </div>
+
+        <div class="section">
+          <h3><i class="fas fa-info-circle"></i> Descripción</h3>
+          <p>${v.descripcion || 'Sin descripción'}</p>
+        </div>
+
+        <div class="section">
+          <h3><i class="fas fa-map-marker-alt"></i> Ubicación</h3>
+          <div class="map-container">${mapaHTML}</div>
+        </div>
+
+        <div class="section">
+          <h3><i class="fas fa-clock"></i> Información General</h3>
+          <div class="info-grid">
+            <div class="info-item"><i class="fas fa-address-card"></i> <strong>Dirección:</strong> ${v.direccion || 'No informado'}</div>
+            <div class="info-item"><i class="fas fa-city"></i> <strong>Distrito:</strong> ${v.distrito || 'No informado'}</div>
+            <div class="info-item"><i class="fas fa-phone"></i> <strong>Teléfono:</strong> ${v.telefono || 'No informado'}</div>
+            <div class="info-item"><i class="fas fa-credit-card"></i> <strong>Métodos de pago:</strong> ${(v.metodos_pago || []).join(', ') || 'No informado'}</div>
+            <div class="info-item"><i class="fas fa-calendar-alt"></i> <strong>Días activos:</strong></div>
+            <div class="dias-activos">${diasHTML}</div>
+            <div class="info-item"><i class="fas fa-clock"></i> <strong>Horarios:</strong></div>
+            <ul class="horarios-lista">${formatoHorario(v)}</ul>
+            <div class="info-item"><i class="fas fa-truck"></i> <strong>Delivery:</strong> ${v.delivery === 'si' ? 'Sí' : 'No'}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3><i class="fas fa-tags"></i> Etiquetas</h3>
+          <div class="tags">${tagsHTML}</div>
+        </div>
+
+        ${galeriaHTML ? `
+        <div class="section">
+          <h3><i class="fas fa-images"></i> Galería</h3>
+          <div class="gallery">${galeriaHTML}</div>
+        </div>
+        ` : ''}
+
+        ${socialButtons.length > 0 ? `
+        <div class="section">
+          <h3><i class="fas fa-share-alt"></i> Redes Sociales</h3>
+          <div class="social-buttons">${socialButtons.join('')}</div>
+        </div>
+        ` : ''}
+
+        ${whatsappBtn ? `
+        <div class="section">
+          <h3><i class="fab fa-whatsapp"></i> Contacto</h3>
+          ${whatsappBtn}
+        </div>
+        ` : ''}
       `;
     }
 
-    function createRedesSociales(redes) {
-      const links = [];
-      const icons = {
-        instagram: 'fab fa-instagram',
-        facebook: 'fab fa-facebook-f',
-        tiktok: 'fab fa-tiktok',
-        email: 'fas fa-envelope',
-        web: 'fas fa-globe'
-      };
-      for (const key in redes) {
-        if (redes[key]) {
-          links.push(`<a href="${redes[key]}" target="_blank" class="${key}"><i class="${icons[key]}"></i></a>`);
-        }
-      }
-      return links.length > 0 ? `<div class="redes-sociales">${links.join('')}</div>` : "";
+    // Modal de imagen
+    function openModal(src) {
+      modalImage.src = src;
+      modal.classList.add('show');
     }
-
-    function openModal(index) {
-      if (!galeriaImgs || galeriaImgs.length === 0) return;
-      currentIndex = index;
-      modalImage.src = galeriaImgs[currentIndex];
-      modal.classList.add("active");
-    }
-window.openModal = openModal;
 
     function closeModal() {
-      modal.classList.remove("active");
+      modal.classList.remove('show');
     }
 
-    function showNext() {
-      if (!galeriaImgs || galeriaImgs.length === 0) return;
-      currentIndex = (currentIndex + 1) % galeriaImgs.length;
-      modalImage.src = galeriaImgs[currentIndex];
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+
+    // Tema inicial
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.dataset.theme = 'dark';
+      themeToggle.textContent = '🌙';
     }
 
-    function showPrev() {
-      if (!galeriaImgs || galeriaImgs.length === 0) return;
-      currentIndex = (currentIndex - 1 + galeriaImgs.length) % galeriaImgs.length;
-      modalImage.src = galeriaImgs[currentIndex];
-    }
-
-    modalCloseBtn.addEventListener("click", closeModal);
-    nextBtn.addEventListener("click", showNext);
-    prevBtn.addEventListener("click", showPrev);
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
-    });
-
-    async function cargarDetalle() {
-      const id = getQueryParam("id");
-      if (!id) {
-        detalleContainer.innerHTML = `<p class="content-section" style="color:red;">ID no proporcionado.</p>`;
-        return;
-      }
-      try {
-        const docRef = doc(db, "comercios", id);
-        const snap = await getDoc(docRef);
-        if (!snap.exists()) {
-          detalleContainer.innerHTML = `<p class="content-section" style="color:red;">No se encontró el comercio.</p>`;
-          return;
-        }
-        const v = snap.data();
-
-        let whatsappLink = "";
-        if (v.telefono) {
-          const numero = v.telefono.replace(/[^0-9+]/g, "");
-          whatsappLink = `https://wa.me/${numero}`;
-        }
-        const horariosHTML = (v.horarios || []).map(h => `<span>${h.apertura} - ${h.cierre}</span>`).join("");
-        const tagsHTML = (v.tags || []).map(t => `<span class="tag">${t}</span>`).join("");
-
-        galeriaImgs = Array.isArray(v.galeria) ? v.galeria : [];
-
-        let galeriaHTML = "";
-        if (galeriaImgs.length > 0) {
-          galeriaHTML = `
-            <div class="galeria-container">
-              <div class="galeria-title">Otras imágenes</div>
-              <div class="galeria">
-                ${galeriaImgs.map((url, idx) =>
-                  `<img src="${url}" alt="Galería ${idx+1}" onclick="openModal(${idx})">`
-                ).join('')}
-              </div>
-            </div>
-          `;
-        }
-
-        const redesHTML = createRedesSociales(v.redes || {});
-
-        detalleContainer.innerHTML = `
-          ${v.imagen ? `<img src="${v.imagen}" class="imagen-principal" alt="${v.nombre}">` : ""}
-          <div class="content-section">
-            <h1>${v.nombre || "Comercio sin nombre"}</h1>
-            <p class="tipo-distrito">${v.tipo || "Sin categoría"} en Distrito ${v.distrito || "?"}</p>
-            ${v.descripcion ? `<p class="descripcion">${v.descripcion}</p>` : ""}
-            <div class="info-grid">
-              ${createInfoItem('fas fa-map-marker-alt', 'Dirección', v.direccion || 'No especificada')}
-              ${createInfoItem('fas fa-phone', 'Teléfono', v.telefono || 'No disponible')}
-              ${createInfoItem('fas fa-calendar-alt', 'Días de apertura', (v.dias || []).join(", ") || 'No especificados')}
-              ${createInfoItem('fas fa-clock', 'Horarios', `<div class="horarios">${horariosHTML}</div>`, true)}
-              ${createInfoItem('fas fa-credit-card', 'Métodos de pago', (v.metodos_pago || []).join(", ") || 'No especificados')}
-            </div>
-            <div class="tags-container">
-              <div class="tags-title"><i class="fas fa-tag"></i> Etiquetas</div>
-              <div class="tags">
-                ${tagsHTML || '<span class="tag" style="background:#fef9c3;color:#a16207;">Sin etiquetas</span>'}
-              </div>
-            </div>
-            <div class="actions-section">
-              ${whatsappLink ? `<a href="${whatsappLink}" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Contactar por WhatsApp</a>` : ""}
-              ${redesHTML}
-            </div>
-          </div>
-          ${galeriaHTML}
-        `;
-      } catch (e) {
-        console.error("Error al cargar detalle:", e);
-        detalleContainer.innerHTML = `<p class="content-section" style="color:red;">Error al cargar los datos.</p>`;
-      }
-    }
-
+    // Cargar detalle inicial
     cargarDetalle();
+
+    // Auto-actualización cada 2 min
+    setInterval(() => {
+      cargarDetalle();
+    }, 120000);
   </script>
 </body>
 </html>
