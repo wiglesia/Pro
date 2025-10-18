@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - igw</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --color-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --color-accent: #10b981;
+      --color-danger: #ef4444;
+      --color-warning: #f59e0b;
+      --color-bg: #f8fafc;
+      --color-card: #ffffff;
+      --color-secondary: #e2e8f0;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--text-dark);
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loader {
+      border: 4px solid #e0e7ff;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    header {
+      background: var(--color-primary);
+      color: white;
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    header a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--color-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    h2 {
+      color: var(--text-dark);
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--color-accent);
+      padding-bottom: 0.8rem;
+      font-weight: 600;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    /* == INICIO: CAMBIOS CSS == */
+    #formContainer {
+      display: none; /* Oculto por defecto */
+      margin-bottom: 3rem;
+    }
+    
+    .btn-primary {
+      cursor: pointer;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      padding: 1.1rem 3rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      font-size: 1.1rem;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .btn-cancel {
+      cursor: pointer;
+      background: var(--color-danger);
+      color: white;
+      border: none;
+      padding: 1.1rem 3rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      font-size: 1.1rem;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+    
+    .btn-cancel:hover {
+      background: #c52d3d;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .form-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .add-button-container {
+      margin-bottom: 2rem;
+      text-align: right;
+    }
+    /* == FIN: CAMBIOS CSS == */
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem 2.5rem;
+      margin-bottom: 3rem;
+      background: var(--color-secondary);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    form > div {
+      align-self: start;
+    }
+
+    form label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--color-card);
+      color: var(--text-dark);
+      transition: var(--transition);
+    }
+
+    form input:focus, form select:focus, form textarea:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      outline: none;
+    }
+
+    form input.error, form select.error, form textarea.error {
+      border-color: var(--color-danger);
+    }
+
+    .error-msg {
+      color: var(--color-danger);
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    textarea {
+      grid-column: 1 / -1;
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .days-container {
+      grid-column: 1 / -1;
+    }
+
+    .days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .days label {
+      background: var(--color-card);
+      padding: 0.7rem 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      display: inline-block;
+      margin-bottom: 0;
+    }
+
+    .days label:hover {
+      background: var(--color-secondary);
+    }
+
+    .days input {
+      display: none;
+    }
+
+    .days input:checked + span {
+      background: var(--color-accent);
+      color: white;
+      border-color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .form-horario {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .form-horario input {
+      flex: 1;
+    }
+
+    .image-upload {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      background: #fcfdff;
+      grid-column: span 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+
+    .image-upload:hover {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+
+    .image-upload > div:first-child {
+      font-weight: 600;
+      color: var(--color-primary);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .image-upload label {
+      cursor: pointer;
+      color: #667eea;
+      font-weight: 600;
+      display: inline-block;
+      margin: 1rem 0 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid #667eea;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .image-upload label:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      justify-content: center;
+    }
+
+    .preview-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100px;
+    }
+
+    .preview {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+      margin-bottom: 8px;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview .remove {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--color-danger);
+      color: white;
+      border: 2px solid white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 1;
+      transition: var(--transition);
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview .remove:hover {
+      transform: scale(1.2);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .url-field {
+      width: 100%;
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      color: var(--text-light);
+      background: #f9fafb;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Ocultamos el botón de submit original */
+    /* button[type="submit"] {
+      display: none; 
+    } */
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      color: var(--text-dark);
+    }
+
+    th {
+      background: var(--color-secondary);
+      color: var(--text-light);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      position: relative;
+    }
+
+    th:hover {
+      background: #d1d5db;
+    }
+
+    th.sort-asc::after, th.sort-desc::after {
+      content: ' ▲';
+      position: absolute;
+      right: 10px;
+    }
+
+    th.sort-desc::after {
+      content: ' ▼';
+    }
+
+    tr:nth-child(even) {
+      background-color: #fcfdff;
+    }
+
+    tr:hover {
+      background-color: #eef4ff;
+      transition: background-color 0.2s;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td:last-child {
+      width: 1%;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: contents;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      margin: 0;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background: var(--color-accent);
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #0c9e6e;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-delete {
+      background: var(--color-danger);
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #c52d3d;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-move {
+      background: var(--color-warning);
+      color: white;
+    }
+
+    .btn-move:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+    }
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filters input, .filters select {
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+    }
+
+    .export-btn {
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .export-btn:hover {
+      background: #0c9e6e;
+      transform: translateY(-1px);
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+          background: var(--color-card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 1rem;
+    }
+
+    .modal-content .buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+      .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--color-accent);
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      z-index: 1001;
+      opacity: 0;
+      transform: translateY(100px);
+      transition: var(--transition);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+      }
+      header a {
+        margin-top: 1rem;
+      }
+      main {
+        margin: 1.5rem;
+        padding: 1.5rem;
+      }
+      form {
+        grid-template-columns: 1fr;
+      }
+      th, td {
+        padding: 0.75rem;
+      }
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+      tr {
+        border: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      td {
+        border-bottom: 1px solid #f1f5f9;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+      }
+      td:last-child {
+        border-bottom: none;
+      }
+      td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 1rem;
+        font-weight: 600;
+        text-align: left;
+        color: var(--text-dark);
+      }
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      .filters {
+        flex-direction: column;
+      }
+      .form-actions {
+        flex-direction: column;
+      }
+      .btn-primary, .btn-cancel {
+        font-size: 1rem;
+        padding: 1rem 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="loader" class="loader-overlay">
+    <div class="loader"></div>
+  </div>
+
+  <div id="loginModal" class="modal">
+    <div class="modal-content" style="background-color: #1f2937;">
+      <h3 style="color: #0c9e6e;">🔐 Iniciar Sesión</h3>
+      <input style="border-radius: 5px;" type="email" id="loginEmail" placeholder=" Email" required>
+      <input style="border-radius: 5px;" type="password" id="loginPassword" placeholder=" Contraseña" required>
+      <div class="buttons">
+        <button id="loginBtn" style="color: #fafffd; background-color: #576d8d;border-radius: 5px; padding: 5px;">Iniciar</button>
+        <button onclick="document.getElementById('loginModal').style.display='none'" style="color: #ffffff; background-color: #576d8d;border-radius: 5px; padding: 5px;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <h1><i class="fas fa-cogs"></i> Panel de Administración</h1>
+    <a href="index.html"><i class="fas fa-arrow-left"></i> Volver al sitio</a>
+  </header>
+
+  <main>
+    <div class="dashboard" id="dashboard">
+      </div>
+
+    <div id="formContainer">
+      <h2 id="formTitle"><i class="fas fa-plus-circle"></i> Agregar Comercio</h2>
+      <form id="formVendedor">
+        <input type="hidden" id="id" />
+
+        <div>
+          <label for="nombre">Nombre del comercio *</label>
+          <input type="text" id="nombre" required />
+          <div class="error-msg" id="error-nombre"></div>
+        </div>
+
+        <div>
+          <label for="categoria">Categoría</label>
+          <select id="categoria">
+            <option value="restaurantes">🍽️ Restaurantes</option>
+            <option value="hoteles">🏨 Hoteles</option>
+            <option value="peluquerias">✂️ Peluquerías</option>
+            <option value="maxikioscos">🛒 Maxikioscos</option>
+            <option value="supermercados">🏪 Supermercados</option>
+            <option value="otros">Otros</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="nivel">Nivel</label>
+          <select id="nivel">
+            <option value="bronce">Bronce</option>
+            <option value="plata">Plata</option>
+            <option value="oro">Oro</option>
+            <option value="diamante">Diamante</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="distrito">Distrito *</label>
+          <select id="distrito" required>
+            <option value="1">Las Flores</option>
+            <option value="2">Rodeo</option>
+            <option value="3">Tudcum</option>
+            <option value="4">Bella Vista</option>
+            <option value="5">Villa Iglesia</option>
+          </select>
+          <div class="error-msg" id="error-distrito"></div>
+        </div>
+
+        <div>
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" placeholder="+54 9 111 222 333" />
+        </div>
+
+        <div>
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" />
+        </div>
+
+        <!-- NUEVO CAMPO: Link de mapas (opcional) -->
+        <div>
+          <label for="mapLink">Link de mapas (opcional)</label>
+          <input type="url" id="mapLink" placeholder="https://www.google.com/maps/embed?..." />
+        </div>
+
+        <div>
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" rows="3"></textarea>
+        </div>
+
+        <div class="days-container">
+          <label>Días de apertura *</label>
+          <div class="days">
+            <label><input type="checkbox" value="lunes" /><span>Lunes</span></label>
+            <label><input type="checkbox" value="martes" /><span>Martes</span></label>
+            <label><input type="checkbox" value="miércoles" /><span>Miércoles</span></label>
+            <label><input type="checkbox" value="jueves" /><span>Jueves</span></label>
+            <label><input type="checkbox" value="viernes" /><span>Viernes</span></label>
+            <label><input type="checkbox" value="sábado" /><span>Sábado</span></label>
+            <label><input type="checkbox" value="domingo" /><span>Domingo</span></label>
+          </div>
+          <div class="error-msg" id="error-dias"></div>
+        </div>
+
+        <div>
+          <label>Horario Semanal (L-V) 1er Turno *</label>
+          <div class="form-horario">
+            <input type="time" id="apertura1" />
+            <input type="time" id="cierre1" />
+          </div>
+          <div class="error-msg" id="error-horario1"></div>
+        </div>
+
+        <div>
+          <label>Horario Semanal (L-V) 2do Turno</label>
+          <div class="form-horario">
+            <input type="time" id="apertura2" />
+            <input type="time" id="cierre2" />
+          </div>
+        </div>
+        
+        <div>
+          <label>Horario Sábado 1er Turno (Opcional)</label>
+          <div class="form-horario">
+            <input type="time" id="aperturaSabado1" />
+            <input type="time" id="cierreSabado1" />
+          </div>
+        </div>
+
+        <div>
+          <label>Horario Sábado 2do Turno (Opcional)</label>
+          <div class="form-horario">
+            <input type="time" id="aperturaSabado2" />
+            <input type="time" id="cierreSabado2" />
+          </div>
+        </div>
+        
+        <div>
+          <label>Horario Domingo 1er Turno (Opcional)</label>
+          <div class="form-horario">
+            <input type="time" id="aperturaDomingo1" />
+            <input type="time" id="cierreDomingo1" />
+          </div>
+        </div>
+
+        <div>
+          <label>Horario Domingo 2do Turno (Opcional)</label>
+          <div class="form-horario">
+            <input type="time" id="aperturaDomingo2" />
+            <input type="time" id="cierreDomingo2" />
+          </div>
+        </div>
+
+        <div>
+          <label for="metodos">Métodos de pago</label>
+          <select id="metodos" multiple>
+            <option>Efectivo</option>
+            <option>Tarjeta</option>
+            <option>QR</option>
+            <option>Transferencia</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="delivery">¿Hace delivery?</label>
+          <select id="delivery">
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="whatsapp">WhatsApp (para botón directo)</label>
+          <input type="tel" id="whatsapp" placeholder="+549111222333" />
+        </div>
+
+        <div>
+          <label for="tags">Etiquetas (separadas por coma)</label>
+          <input type="text" id="tags" placeholder="pizza, bebidas, postres" />
+        </div>
+
+        <div class="image-upload">
+          <div>📷 Imagen principal *</div>
+          <label for="imagenPrincipal">Seleccionar Archivo</label>
+          <input type="file" id="imagenPrincipal" accept="image/*" />
+          <div id="previewPrincipal" class="preview-container"></div>
+          <div class="error-msg" id="error-imagen"></div>
+        </div>
+
+        <div class="image-upload">
+          <div>🖼️ Galería (máx. 5 imágenes)</div>
+          <label for="galeria">Subir Fotos</label>
+          <input type="file" id="galeria" multiple accept="image/*" />
+          <div id="previewGaleria" class="preview-container"></div>
+        </div>
+
+        <div>
+          <label for="instagram">Instagram</label>
+          <input type="url" id="instagram" placeholder="https://instagram.com/tucomercio" />
+        </div>
+
+        <div>
+          <label for="facebook">Facebook</label>
+          <input type="url" id="facebook" placeholder="https://facebook.com/tucomercio" />
+        </div>
+
+        <div>
+          <label for="tiktok">TikTok</label>
+          <input type="url" id="tiktok" placeholder="https://tiktok.com/@tucomercio" />
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="contacto@tucomercio.com" />
+        </div>
+
+        <div>
+          <label for="web">Sitio web</label>
+          <input type="url" id="web" placeholder="https://www.tucomercio.com" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Guardar Comercio</button>
+          <button type="button" id="cancelBtn" class="btn-cancel"><i class="fas fa-times"></i> Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="add-button-container">
+      <button id="showAddFormBtn" class="btn-primary" style="background: var(--color-accent);"><i class="fas fa-plus-circle"></i> Agregar Comercio</button>
+    </div>
+    
+    <h2><i class="fas fa-list"></i> Lista de Comercios</h2>
+    <div class="filters">
+      <input type="text" id="searchTable" placeholder="Buscar por nombre..." />
+      <select id="filterDistrito">
+        <option value="">Todos los distritos</option>
+        <option value="1">Las Flores</option>
+        <option value="2">Rodeo</option>
+        <option value="3">Tudcum</option>
+        <option value="4">Bella Vista</option>
+        <option value="5">Villa Iglesia</option>
+      </select>
+      <select id="filterNivel">
+        <option value="">Todos los niveles</option>
+        <option value="bronce">Bronce</option>
+        <option value="plata">Plata</option>
+        <option value="oro">Oro</option>
+        <option value="diamante">Diamante</option>
+      </select>
+      <button class="export-btn" id="exportBtn"><i class="fas fa-download"></i> Exportar CSV</button>
+    </div>
+    <div class="table-container">
+      <table id="tablaVendedores">
+        <thead>
+          <tr>
+            <th data-sort="id">ID</th>
+            <th data-sort="nombre">Nombre</th>
+            <th data-sort="categoria">Categoría</th>
+            <th data-sort="nivel">Nivel</th>
+            <th data-sort="distrito">Distrito</th>
+            <th data-sort="visualizaciones">Visualizaciones</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYS2Ga7h4dF9y_RyCcK8LJaCj-CUb1PuE",
+      authDomain: "saboresdeldistrito.firebaseapp.com",
+      projectId: "saboresdeldistrito",
+      storageBucket: "saboresdeldistrito.firebasestorage.app",
+      messagingSenderId: "814541339857",
+      appId: "1:814541339857:web:2490bb261d7aaa423ed9f0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const API_KEY = "86db997f09d5db12c1f731dc79e4d83d";
+
+    let currentUser = null;
+    let vendedores = [];
+    let galeriaData = [];
+    let sortColumn = 'orden';
+    let sortDirection = 'asc';
+
+    // == INICIO: CAMBIOS JS ==
+    const formContainer = document.getElementById('formContainer');
+    const formTitle = document.getElementById('formTitle');
+    const showAddFormBtn = document.getElementById('showAddFormBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    // == FIN: CAMBIOS JS ==
+
+    // Autenticación con timeout
+    let authTimeout = setTimeout(() => {
+      console.log('Timeout: Mostrando modal de login');
+      document.getElementById('loginModal').style.display = 'flex';
+      document.getElementById('loader').style.display = 'none';
+    }, 5000);
+
+    onAuthStateChanged(auth, (user) => {
+      console.log('onAuthStateChanged triggered:', user ? 'Logged in' : 'Not logged in');
+      if (user) {
+        clearTimeout(authTimeout);
+        currentUser = user;
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('loader').style.display = 'none';
+        cargarComercios();
+        cargarDashboard();
+      } else {
+        clearTimeout(authTimeout);
+        document.getElementById('loginModal').style.display = 'flex';
+        document.getElementById('loader').style.display = 'none';
+      }
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showToast('Login exitoso', 'success');
+      } catch (error) {
+        console.error('Login error:', error);
+        showToast('Error de login: ' + error.message, 'error');
+      }
+    });
+
+    // == INICIO: CAMBIOS JS (Listeners de formulario) ==
+    // Botón para mostrar el formulario de AGREGAR
+    showAddFormBtn.addEventListener('click', () => {
+        resetForm(); // Limpia y resetea los campos
+        formContainer.style.display = 'block';
+        formTitle.innerHTML = '<i class="fas fa-plus-circle"></i> Agregar Comercio';
+        document.getElementById('imagenPrincipal').required = true; // Asegurarse de que sea requerido al agregar
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Botón para CANCELAR/cerrar el formulario
+    cancelBtn.addEventListener('click', () => {
+        formContainer.style.display = 'none';
+        resetForm();
+    });
+    // == FIN: CAMBIOS JS ==
+
+    // Dashboard
+    async function cargarDashboard() {
+      try {
+        const snapshot = await getDocs(collection(db, "comercios"));
+        const data = snapshot.docs.map(doc => doc.data());
+        const total = data.length;
+        const porDistrito = {};
+        const porNivel = {};
+        let totalVisualizaciones = 0;
+
+        data.forEach(com => {
+          porDistrito[com.distrito] = (porDistrito[com.distrito] || 0) + 1;
+          porNivel[com.nivel] = (porNivel[com.nivel] || 0) + 1;
+          totalVisualizaciones += com.visualizaciones || 0;
+        });
+
+        document.getElementById('dashboard').innerHTML = `
+          <div class="stat-card">
+            <h3>${total}</h3>
+            <p>Total Comercios</p>
+          </div>
+          <div class="stat-card">
+            <h3>${Object.keys(porDistrito).length}</h3>
+            <p>Distritos Cubiertos</p>
+          </div>
+          <div class="stat-card">
+            <h3>${Object.keys(porNivel).length}</h3>
+            <p>Niveles Activos</p>
+          </div>
+          <div class="stat-card">
+            <h3>${totalVisualizaciones}</h3>
+            <p>Visualizaciones Totales</p>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error cargando dashboard:', error);
+        showToast('Error cargando estadísticas', 'error');
+      }
+    }
+
+    // Geolocalización para ubicación
+    async function getLocation() {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
+            reject
+          );
+        } else {
+          reject(new Error('Geolocalización no soportada'));
+        }
+      });
+    }
+
+    // Upload a ImgBB
+    async function uploadToImgbb(file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.success) return data.data.url;
+      throw new Error("Error al subir imagen");
+    }
+
+    // Eventos de imagen
+    document.getElementById('imagenPrincipal').addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('previewPrincipal').innerHTML = `<div class="preview"><div class="loader"></div></div>`;
+      try {
+        const url = await uploadToImgbb(file);
+        document.getElementById('previewPrincipal').innerHTML = `
+          <div class="preview">
+            <img src="${url}">
+            <button class="remove" onclick="removeImage('principal')">×</button>
+          </div>
+          <input class="url-field" id="urlPrincipal" value="${url}" readonly>
+        `;
+      } catch (err) {
+        document.getElementById('previewPrincipal').innerHTML = `<p style="color:red; font-size:0.9rem;">❌ Error al subir imagen</p>`;
+      }
+    });
+
+        document.getElementById('galeria').addEventListener("change", async (e) => {
+      const files = [...e.target.files].slice(0, 5 - galeriaData.length);
+      for (const file of files) {
+        const idx = galeriaData.length;
+        galeriaData.push({ loading: true });
+        renderGaleriaPreview();
+        try {
+          const url = await uploadToImgbb(file);
+          galeriaData[idx] = { url };
+        } catch (err) {
+          galeriaData[idx] = { error: true };
+        }
+        renderGaleriaPreview();
+      }
+    });
+
+    function renderGaleriaPreview() {
+      document.getElementById('previewGaleria').innerHTML = galeriaData.map((g, i) => {
+        if (g.loading) return `<div class="preview"><div class="loader"></div></div>`;
+        if (g.error) return `<div class="preview"><p style='color:red;'>Error</p></div>`;
+        return `
+          <div class="preview-item">
+            <div class="preview">
+              <img src="${g.url}" alt="Imagen ${i + 1}">
+              <button class="remove" onclick="removeImage('galeria_${i}')">×</button>
+            </div>
+            <input class="url-field" value="${g.url}" readonly>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function removeImage(tipo) {
+      if (tipo === 'principal') {
+        document.getElementById('previewPrincipal').innerHTML = "";
+        document.getElementById('imagenPrincipal').value = "";
+      } else if (tipo.startsWith("galeria")) {
+        const idx = parseInt(tipo.split("_")[1]);
+        galeriaData.splice(idx, 1);
+        renderGaleriaPreview();
+      }
+    }
+
+    window.removeImage = removeImage;
+
+    // Form submit
+    document.getElementById("formVendedor").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Validaciones
+      let valid = true;
+      const nombre = document.getElementById("nombre").value.trim();
+      if (!nombre) {
+        document.getElementById("error-nombre").textContent = "Nombre requerido";
+        valid = false;
+      } else {
+        document.getElementById("error-nombre").textContent = "";
+      }
+
+      const distrito = document.getElementById("distrito").value;
+      if (!distrito) {
+        document.getElementById("error-distrito").textContent = "Distrito requerido";
+        valid = false;
+      } else {
+        document.getElementById("error-distrito").textContent = "";
+      }
+
+      const dias = [...document.querySelectorAll(".days input:checked")].map(i => i.value);
+      if (dias.length === 0) {
+        document.getElementById("error-dias").textContent = "Al menos un día requerido";
+        valid = false;
+      } else {
+        document.getElementById("error-dias").textContent = "";
+      }
+
+      const ap1 = document.getElementById("apertura1").value;
+      const ci1 = document.getElementById("cierre1").value;
+      if (dias.some(d => ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'].includes(d)) && (!ap1 || !ci1)) {
+        document.getElementById("error-horario1").textContent = "Horario semanal requerido si se marcan días de semana";
+        valid = false;
+      } else {
+        document.getElementById("error-horario1").textContent = "";
+      }
+
+      const imagen = document.getElementById("urlPrincipal")?.value;
+      if (!imagen) {
+        document.getElementById("error-imagen").textContent = "Imagen principal requerida";
+        valid = false;
+      } else {
+        document.getElementById("error-imagen").textContent = "";
+      }
+
+      if (!valid) return;
+      
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+      const horarios = {
+          semana: [],
+          sabado: [],
+          domingo: []
+      };
+      if (ap1 && ci1) horarios.semana.push({ apertura: ap1, cierre: ci1 });
+      const ap2 = document.getElementById("apertura2").value;
+      const ci2 = document.getElementById("cierre2").value;
+      if (ap2 && ci2) horarios.semana.push({ apertura: ap2, cierre: ci2 });
+
+      const apSab1 = document.getElementById("aperturaSabado1").value;
+      const ciSab1 = document.getElementById("cierreSabado1").value;
+      if (apSab1 && ciSab1) horarios.sabado.push({ apertura: apSab1, cierre: ciSab1 });
+      const apSab2 = document.getElementById("aperturaSabado2").value;
+      const ciSab2 = document.getElementById("cierreSabado2").value;
+      if (apSab2 && ciSab2) horarios.sabado.push({ apertura: apSab2, cierre: ciSab2 });
+
+      const apDom1 = document.getElementById("aperturaDomingo1").value;
+      const ciDom1 = document.getElementById("cierreDomingo1").value;
+      if (apDom1 && ciDom1) horarios.domingo.push({ apertura: apDom1, cierre: ciDom1 });
+      const apDom2 = document.getElementById("aperturaDomingo2").value;
+      const ciDom2 = document.getElementById("cierreDomingo2").value;
+      if (apDom2 && ciDom2) horarios.domingo.push({ apertura: apDom2, cierre: ciDom2 });
+      
+      const metodos_pago = [...document.getElementById("metodos").options]
+        .filter(opt => opt.selected)
+        .map(opt => opt.value);
+
+      const comercioData = {
+        nombre: nombre,
+        categoria: document.getElementById("categoria").value,
+        nivel: document.getElementById("nivel").value,
+        distrito: distrito,
+        telefono: document.getElementById("telefono").value,
+        direccion: document.getElementById("direccion").value,
+        mapLink: document.getElementById("mapLink").value, // NUEVO: Campo opcional para link de mapas
+        descripcion: document.getElementById("descripcion").value,
+        dias: dias,
+        horarios: horarios,
+        metodos_pago: metodos_pago,
+        delivery: document.getElementById("delivery").value,
+        whatsapp: document.getElementById("whatsapp").value,
+        tags: document.getElementById("tags").value.split(",").map(t => t.trim()).filter(Boolean),
+        imagen: imagen,
+        galeria: galeriaData.map(g => g.url),
+        redes: {
+          instagram: document.getElementById("instagram").value,
+          facebook: document.getElementById("facebook").value,
+          tiktok: document.getElementById("tiktok").value,
+          email: document.getElementById("email").value,
+          web: document.getElementById("web").value,
+        }
+      };
+
+      const id = document.getElementById("id").value;
+
+      try {
+        if (id) {
+          // Actualizar
+          await updateDoc(doc(db, "comercios", id), comercioData);
+          showToast("✅ Comercio actualizado");
+        } else {
+          // Crear
+          comercioData.visualizaciones = 0;
+          comercioData.orden = vendedores.length;
+          try {
+            const coords = await getLocation();
+            comercioData.ubicacion = coords;
+          } catch (geoError) {
+            console.warn("Error de geolocalización:", geoError.message);
+            showToast("Advertencia: No se pudo obtener la ubicación", "warning");
+          }
+          await addDoc(collection(db, "comercios"), comercioData);
+          showToast("🎉 Comercio agregado");
+        }
+        
+        // == INICIO: CAMBIOS JS (Ocultar al guardar) ==
+        formContainer.style.display = 'none'; // Ocultar formulario
+        resetForm(); // Limpiar
+        // == FIN: CAMBIOS JS ==
+        
+        cargarComercios();
+        cargarDashboard();
+      } catch (error) {
+        console.error("Error guardando:", error);
+        showToast("Error al guardar: " + error.message, "error");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = '<i class="fas fa-save"></i> Guardar Comercio';
+      }
+    });
+
+    // Cargar comercios
+    async function cargarComercios() {
+      try {
+        const q = query(collection(db, "comercios"), orderBy(sortColumn, sortDirection));
+        const snapshot = await getDocs(q);
+        vendedores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderTabla();
+      } catch (error) {
+        console.error('Error cargando comercios:', error);
+        showToast('Error cargando la lista de comercios', 'error');
+      }
+    }
+
+    // Render tabla
+    function renderTabla(data = vendedores) {
+      const tbody = document.getElementById("tablaVendedores").getElementsByTagName("tbody")[0];
+      const distritosMap = { "1": "Las Flores", "2": "Rodeo", "3": "Tudcum", "4": "Bella Vista", "5": "Villa Iglesia" };
+      
+      tbody.innerHTML = data.map((v, index) => `
+        <tr>
+          <td data-label="ID">${v.id.substring(0, 5)}...</td>
+          <td data-label="Nombre">${v.nombre}</td>
+          <td data-label="Categoría">${v.categoria}</td>
+          <td data-label="Nivel">${v.nivel}</td>
+          <td data-label="Distrito">${distritosMap[v.distrito] || 'N/A'}</td>
+          <td data-label="Visualizaciones">${v.visualizaciones || 0}</td>
+          <td data-label="Acciones">
+            <div class="actions">
+              <button class="btn-edit" onclick="editar('${v.id}')"><i class="fas fa-edit"></i></button>
+              <button class="btn-delete" onclick="eliminar('${v.id}')"><i class="fas fa-trash"></i></button>
+              <button class="btn-move" onclick="mover('${v.id}', 'up')" ${index === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+              <button class="btn-move" onclick="mover('${v.id}', 'down')" ${index === data.length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+      
+      document.querySelectorAll('#tablaVendedores th[data-sort]').forEach(th => {
+          th.classList.remove('sort-asc', 'sort-desc');
+          if (th.dataset.sort === sortColumn) {
+              th.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+          }
+      });
+    }
+
+    // Reset form
+    function resetForm() {
+      document.getElementById("formVendedor").reset();
+      document.getElementById("id").value = "";
+      
+      [...document.querySelectorAll(".days input:checked")].forEach(i => i.checked = false);
+      [...document.getElementById("metodos").options].forEach(opt => opt.selected = false);
+
+      document.getElementById('previewPrincipal').innerHTML = "";
+      document.getElementById('imagenPrincipal').value = "";
+      galeriaData = [];
+      renderGaleriaPreview();
+      
+      document.querySelectorAll('.error-msg').forEach(el => el.textContent = "");
+      
+      document.getElementById("aperturaSabado1").value = "";
+      document.getElementById("cierreSabado1").value = "";
+      document.getElementById("aperturaSabado2").value = "";
+      document.getElementById("cierreSabado2").value = "";
+      document.getElementById("aperturaDomingo1").value = "";
+      document.getElementById("cierreDomingo1").value = "";
+      document.getElementById("aperturaDomingo2").value = "";
+      document.getElementById("cierreDomingo2").value = "";
+
+      // NUEVO: Limpiar campo mapLink
+      document.getElementById("mapLink").value = "";
+    }
+
+    // Editar
+    window.editar = async function(id) {
+      try {
+        const docSnap = await getDoc(doc(db, "comercios", id));
+        if (!docSnap.exists()) {
+          showToast("Error: Comercio no encontrado", "error");
+          return;
+        }
+        const data = docSnap.data();
+        
+        // Limpiar el form antes de llenarlo (por si acaso)
+        resetForm();
+
+        // Quitar 'required' del input de archivo al editar
+        document.getElementById('imagenPrincipal').required = false;
+
+        document.getElementById("id").value = id;
+        document.getElementById("nombre").value = data.nombre || "";
+        document.getElementById("categoria").value = data.categoria || "restaurantes";
+        document.getElementById("nivel").value = data.nivel || "bronce";
+        document.getElementById("distrito").value = data.distrito || "1";
+        document.getElementById("telefono").value = data.telefono || "";
+        document.getElementById("direccion").value = data.direccion || "";
+        document.getElementById("mapLink").value = data.mapLink || ""; // NUEVO         document.getElementById("descripcion").value = data.descripcion || "";
+        document.getElementById("delivery").value = data.delivery || "no";
+        document.getElementById("whatsapp").value = data.whatsapp || "";
+        document.getElementById("tags").value = (data.tags || []).join(", ");
+        
+        [...document.querySelectorAll(".days input")].forEach(input => {
+          input.checked = (data.dias || []).includes(input.value);
+        });
+
+        const horarios = data.horarios || { semana: [], sabado: [], domingo: [] };
+        document.getElementById("apertura1").value = horarios.semana?.[0]?.apertura || "";
+        document.getElementById("cierre1").value = horarios.semana?.[0]?.cierre || "";
+        document.getElementById("apertura2").value = horarios.semana?.[1]?.apertura || "";
+        document.getElementById("cierre2").value = horarios.semana?.[1]?.cierre || "";
+        document.getElementById("aperturaSabado1").value = horarios.sabado?.[0]?.apertura || "";
+        document.getElementById("cierreSabado1").value = horarios.sabado?.[0]?.cierre || "";
+        document.getElementById("aperturaSabado2").value = horarios.sabado?.[1]?.apertura || "";
+        document.getElementById("cierreSabado2").value = horarios.sabado?.[1]?.cierre || "";
+        document.getElementById("aperturaDomingo1").value = horarios.domingo?.[0]?.apertura || "";
+        document.getElementById("cierreDomingo1").value = horarios.domingo?.[0]?.cierre || "";
+        document.getElementById("aperturaDomingo2").value = horarios.domingo?.[1]?.apertura || "";
+        document.getElementById("cierreDomingo2").value = horarios.domingo?.[1]?.cierre || "";
+
+        [...document.getElementById("metodos").options].forEach(opt => {
+          opt.selected = (data.metodos_pago || []).includes(opt.value);
+        });
+
+        document.getElementById('previewPrincipal').innerHTML = "";
+        if (data.imagen) {
+          document.getElementById('previewPrincipal').innerHTML = `
+            <div class="preview">
+              <img src="${data.imagen}">
+              <button class="remove" onclick="removeImage('principal')">×</button>
+            </div>
+            <input class="url-field" id="urlPrincipal" value="${data.imagen}" readonly>
+          `;
+        }
+
+        galeriaData = (data.galeria || []).map(url => ({ url }));
+        renderGaleriaPreview();
+
+        document.getElementById("instagram").value = data.redes?.instagram || "";
+        document.getElementById("facebook").value = data.redes?.facebook || "";
+        document.getElementById("tiktok").value = data.redes?.tiktok || "";
+        document.getElementById("email").value = data.redes?.email || "";
+        document.getElementById("web").value = data.redes?.web || "";
+
+        // == INICIO: CAMBIOS JS (Mostrar al editar) ==
+        formContainer.style.display = 'block';
+        formTitle.innerHTML = '<i class="fas fa-edit"></i> Editar Comercio';
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+        // == FIN: CAMBIOS JS ==
+
+      } catch (error) {
+        console.error('Error editando comercio:', error);
+        showToast('Error editando comercio', 'error');
+      }
+    };
+
+    // Eliminar
+    window.eliminar = async function(id) {
+      if (!confirm("¿Seguro que querés eliminar este comercio?")) return;
+      try {
+        await deleteDoc(doc(db, "comercios", id));
+        cargarComercios();
+        cargarDashboard();
+        showToast("🗑️ Comercio eliminado");
+      } catch (error)
+      {
+        console.error('Error eliminando comercio:', error);
+        showToast('Error eliminando comercio', 'error');
+      }
+    };
+
+    // Mover orden
+    window.mover = async function(id, direction) {
+      const index = vendedores.findIndex(v => v.id === id);
+      if (direction === 'up' && index > 0) {
+        [vendedores[index], vendedores[index - 1]] = [vendedores[index - 1], vendedores[index]];
+      } else if (direction === 'down' && index < vendedores.length - 1) {
+        [vendedores[index], vendedores[index + 1]] = [vendedores[index + 1], vendedores[index]];
+      }
+      try {
+        for (let i = 0; i < vendedores.length; i++) {
+          await updateDoc(doc(db, "comercios", vendedores[i].id), { orden: i });
+          vendedores[i].orden = i;
+        }
+        renderTabla();
+      } catch (error) {
+        console.error('Error moviendo orden:', error);
+        showToast('Error moviendo orden', 'error');
+      }
+    };
+
+    // Filtros y búsqueda
+    document.getElementById('searchTable').addEventListener('input', filterTable);
+    document.getElementById('filterDistrito').addEventListener('change', filterTable);
+    document.getElementById('filterNivel').addEventListener('change', filterTable);
+
+    function filterTable() {
+      const search = document.getElementById('searchTable').value.toLowerCase();
+      const distrito = document.getElementById('filterDistrito').value;
+      const nivel = document.getElementById('filterNivel').value;
+
+      let filtered = vendedores.filter(v =>
+        (v.nombre && v.nombre.toLowerCase().includes(search)) &&
+        (distrito === "" || v.distrito == distrito) &&
+        (nivel === "" || v.nivel === nivel)
+      );
+      renderTabla(filtered);
+    }
+
+    // Sort
+    document.querySelectorAll('#tablaVendedores th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const column = th.dataset.sort;
+        if (sortColumn === column) {
+          sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortColumn = column;
+          sortDirection = 'asc';
+        }
+        
+        document.getElementById('searchTable').value = "";
+        document.getElementById('filterDistrito').value = "";
+        document.getElementById('filterNivel').value = "";
+        
+        cargarComercios();
+      });
+    });
+
+    // Export CSV
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const csv = 'ID,Nombre,Categoría,Nivel,Distrito,Visualizaciones\n' +
+        vendedores.map(v => `${v.id},"${v.nombre || ''}","${v.categoria || ''}","${v.nivel || ''}","${v.distrito || ''}",${v.visualizaciones || 0}`).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'comercios.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Toast
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
